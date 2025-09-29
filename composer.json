@@ -1,0 +1,17 @@
+{
+    "name": "erick/qr_eys",
+    "autoload": {
+        "psr-4": {
+            "Erick\\QrEys\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "erialex",
+            "email": "erickcortes246@gmail.com"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    }
+}
