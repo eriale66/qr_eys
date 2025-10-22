@@ -29,4 +29,16 @@ class UsuarioModel {
         $stmt = $this->conn->prepare($sql);
         return $stmt->execute([$nombre, $usuario, $hash, $rol]);
     }
+
+    public function verificarCredenciales($usuario, $contraseña){
+         $sql = "SELECT * FROM usuarios WHERE usuario = ? AND estado = 1";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([$usuario]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($user && password_verify($contraseña, $user['contraseña'])) {
+        return $user;
+    }
+    return false;
+    }
 }
