@@ -1,24 +1,14 @@
 <?php
-// ================================================
-// Archivo de rutas del sistema
-// ================================================
-
-// Cargar controladores
 require_once __DIR__ . '/../src/controllers/DashboardController.php';
 require_once __DIR__ . '/../src/controllers/RegistroController.php';
 
-// Obtener URI actual
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
-// Detectar subcarpeta base (ej. /qr_eys/public)
-$scriptName = dirname($_SERVER['SCRIPT_NAME']);
-$basePath = rtrim($scriptName, '/');
+$basePath = dirname($_SERVER['SCRIPT_NAME']);
 $uri = str_replace($basePath, '', $uri);
-
-// Normalizar URI
 $uri = rtrim($uri, '/');
 
-// Ruteo simple
+
+
 switch ($uri) {
     case '':
     case '/':
@@ -27,6 +17,7 @@ switch ($uri) {
         break;
 
     case '/registro':
+        echo "<h3>Ruta /registro detectada</h3>"; // 🔍 prueba
         (new RegistroController())->mostrarFormulario();
         break;
 
@@ -34,9 +25,28 @@ switch ($uri) {
         (new RegistroController())->registrarAcceso();
         break;
 
+    // Rutas de dashboard
+    case '/empleados':
+        (new DashboardController())->empleados();
+        break;
+
+    case '/clientes':
+        (new DashboardController())->clientes();
+        break;
+
+    case '/citas':
+        (new DashboardController())->citas();
+        break;
+
+    case '/reportes':
+        (new DashboardController())->reportes();
+        break;
+
+    case '/configuracion':
+        (new DashboardController())->configuracion();
+        break;
+
     default:
-        http_response_code(404);
-        echo "<h1>404 - Página no encontrada</h1>";
-        echo "<p>Ruta solicitada: <strong>$uri</strong></p>";
+        echo "<h1>404 - Página no encontrada</h1><p>Ruta: $uri</p>";
         break;
 }

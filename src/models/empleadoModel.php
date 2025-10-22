@@ -34,4 +34,12 @@ class EmpleadoModel {
         $stmt = $this->conn->prepare($sql);
         return $stmt->execute([$id_empleado]);
     }
+
+    public function obtenerPorId($id_empleado) {
+    $sql = "SELECT * FROM empleados WHERE id_empleado = ?";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([$id_empleado]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
 }

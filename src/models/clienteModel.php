@@ -34,4 +34,12 @@ class ClienteModel {
         $stmt = $this->conn->prepare($sql);
         return $stmt->execute([$id_cliente]);
     }
+
+    public function obtenerPorId($id_cliente) {
+    $sql = "SELECT * FROM clientes WHERE id_cliente = ?";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute([$id_cliente]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
 }
