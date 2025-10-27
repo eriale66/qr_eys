@@ -5,7 +5,7 @@ $db = new Database();
 $conn = $db->connect();
 
 if ($conn) {
-    echo "✅ Conexión exitosa a la base de datos: " . $_ENV['DB_NAME'];
+    echo "Conexión exitosa a la base de datos: " . $_ENV['DB_NAME'];
 } else {
-    echo "❌ Error al conectar.";
+    echo "Error al conectar.";
 }

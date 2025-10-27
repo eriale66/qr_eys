@@ -2,6 +2,9 @@
 require_once __DIR__ . '/../src/controllers/DashboardController.php';
 require_once __DIR__ . '/../src/controllers/RegistroController.php';
 require_once __DIR__ . '/../src/controllers/LoginController.php';
+require_once __DIR__ . '/../src/controllers/EmpleadosController.php';
+require_once __DIR__ . '/../src/controllers/ClientesController.php';
+
 
 
 
@@ -41,7 +44,7 @@ switch ($uri) {
         break;
 
     case '/registro':
-        echo "<h3>Ruta /registro detectada</h3>"; // 🔍 prueba
+        echo "<h3>Ruta /registro detectada</h3>"; //  prueba
         (new RegistroController())->mostrarFormulario();
         break;
 
@@ -50,16 +53,16 @@ switch ($uri) {
         break;
 
     // Rutas de dashboard
-    case '/empleados':
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        if (!isset($_SESSION['usuario'])) {
-            header("Location: /qr_eys/public/login");
-            exit;
-        }
-        (new DashboardController())->empleados();
-        break;
+    // case '/empleados':
+    //     if (session_status() === PHP_SESSION_NONE) {
+    //         session_start();
+    //     }
+    //     if (!isset($_SESSION['usuario'])) {
+    //         header("Location: /qr_eys/public/login");
+    //         exit;
+    //     }
+    //     (new DashboardController())->empleados();
+    //     break;
 
     case '/clientes':
         if (session_status() === PHP_SESSION_NONE) {
@@ -103,6 +106,79 @@ switch ($uri) {
             exit;
         }
         (new DashboardController())->configuracion();
+        break;
+
+    case '/empleados':
+        (new EmpleadoController())->index();
+        break;
+
+    case '/empleados/generarQR':
+        $id = $_GET['id'] ?? null;
+        (new EmpleadoController())->generarQR($id);
+        break;
+
+    case '/empleados/pdf':
+        (new EmpleadoController())->exportarPDF();
+        break;
+
+    case '/empleados/excel':
+        (new EmpleadoController())->exportarExcel();
+        break;
+
+    case '/empleados/agregar':
+        (new EmpleadoController())->mostrarFormularioAgregar();
+        break;
+
+    case '/empleados/guardar':
+        (new EmpleadoController())->guardarEmpleado();
+        break;
+
+    case '/empleados/editar':
+        $id = $_GET['id'] ?? null;
+        (new EmpleadoController())->mostrarFormularioEditar($id);
+        break;
+
+    case '/empleados/actualizar':
+        (new EmpleadoController())->actualizarEmpleado();
+        break;
+
+    case '/empleados/eliminar':
+        $id = $_GET['id'] ?? null;
+        (new EmpleadoController())->eliminarEmpleado($id);
+        break;
+
+    case '/clientes/generarQR':
+        $id = $_GET['id'] ?? null;
+        (new ClienteController())->generarQR($id);
+        break;
+
+    case '/clientes/pdf':
+        (new ClienteController())->exportarPDF();
+        break;
+
+    case '/clientes/excel':
+        (new ClienteController())->exportarExcel();
+        break;
+    case '/clientes/agregar':
+        (new ClienteController())->mostrarFormularioAgregar();
+        break;
+
+    case '/clientes/guardar':
+        (new ClienteController())->guardarCliente();
+        break;
+
+    case '/clientes/editar':
+        $id = $_GET['id'] ?? null;
+        (new ClienteController())->mostrarFormularioEditar($id);
+        break;
+
+    case '/clientes/actualizar':
+        (new ClienteController())->actualizarCliente();
+        break;
+
+    case '/clientes/eliminar':
+        $id = $_GET['id'] ?? null;
+        (new ClienteController())->eliminarCliente($id);
         break;
 
     default:

@@ -1,45 +1,49 @@
 <?php
-require_once __DIR__ . '/../../config/database.php';
-
-class ClienteModel {
+class ClienteModel
+{
     private $conn;
 
-    public function __construct() {
+    public function __construct()
+    {
+        require_once __DIR__ . '/../../config/database.php';
         $db = new Database();
         $this->conn = $db->connect();
     }
 
-    public function obtenerTodos() {
-        $sql = "SELECT * FROM clientes WHERE estado = 1";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute();
+    public function obtenerTodos()
+    {
+        $sql = "SELECT * FROM clientes ORDER BY id_cliente DESC";
+        $stmt = $this->conn->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function obtenerPorQR($codigo_qr) {
-        $sql = "SELECT * FROM clientes WHERE codigo_qr = ?";
+    public function obtenerPorId($id_cliente)
+    {
+        $sql = "SELECT * FROM clientes WHERE id_cliente = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->execute([$codigo_qr]);
+        $stmt->execute([$id_cliente]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function crear($nombre, $telefono, $correo, $codigo_qr) {
-        $sql = "INSERT INTO clientes (nombre, telefono, correo, codigo_qr) VALUES (?, ?, ?, ?)";
+    public function insertarCliente($nombre, $correo, $telefono, $codigo_qr)
+    {
+        $sql = "INSERT INTO clientes (nombre, correo, telefono, codigo_qr, estado)
+                VALUES (?, ?, ?, ?, 1)";
         $stmt = $this->conn->prepare($sql);
-        return $stmt->execute([$nombre, $telefono, $correo, $codigo_qr]);
+        $stmt->execute([$nombre, $correo, $telefono, $codigo_qr]);
     }
 
-    public function eliminar($id_cliente) {
-        $sql = "UPDATE clientes SET estado = 0 WHERE id_cliente = ?";
+    public function actualizarCliente($id_cliente, $nombre, $correo, $telefono)
+    {
+        $sql = "UPDATE clientes SET nombre=?, correo=?, telefono=? WHERE id_cliente=?";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([$nombre, $correo, $telefono, $id_cliente]);
+    }
+
+    public function eliminarCliente($id_cliente)
+    {
+        $sql = "DELETE FROM clientes WHERE id_cliente=?";
         $stmt = $this->conn->prepare($sql);
         return $stmt->execute([$id_cliente]);
     }
-
-    public function obtenerPorId($id_cliente) {
-    $sql = "SELECT * FROM clientes WHERE id_cliente = ?";
-    $stmt = $this->conn->prepare($sql);
-    $stmt->execute([$id_cliente]);
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-}
-
 }
