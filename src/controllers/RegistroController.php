@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . '/../models/EmpleadoModel.php';
-require_once __DIR__ . '/../models/ClienteModel.php';
-require_once __DIR__ . '/../models/RegistroModel.php';
+require_once __DIR__ . '/../models/empleadoModel.php';
+require_once __DIR__ . '/../models/clienteModel.php';
+require_once __DIR__ . '/../models/registroModel.php';
 require_once __DIR__ . '/../../config/database.php';
 
 class RegistroController {
@@ -16,14 +16,13 @@ class RegistroController {
     }
 
     public function mostrarFormulario() {
-        // ✅ Muestra el formulario de escaneo
         include __DIR__ . '/../views/registro/formulario.php';
     }
 
     public function registrarAcceso() {
-        // ✅ Si no se envió código
+        // Validar código recibido
         if (empty($_POST['codigo'])) {
-            $mensaje = "⚠️ No se detectó ningún código.";
+            $mensaje = "No se detectó ningún código.";
             include __DIR__ . '/../views/registro/resultado.php';
             return;
         }
@@ -45,7 +44,7 @@ class RegistroController {
 
         // Si no existe el QR
         if (!$persona) {
-            $mensaje = "❌ Código no reconocido.";
+            $mensaje = "Código no reconocido.";
             include __DIR__ . '/../views/registro/resultado.php';
             return;
         }
@@ -59,7 +58,7 @@ class RegistroController {
         // Mostrar mensaje en pantalla
         $nombre = htmlspecialchars($persona['nombre']);
         $hora = date('H:i:s');
-        $mensaje = "✅ {$tipo_movimiento} registrada para {$nombre} a las {$hora}.";
+        $mensaje = "Movimiento {$tipo_movimiento} registrado para {$nombre} a las {$hora}.";
         include __DIR__ . '/../views/registro/resultado.php';
     }
 
@@ -74,7 +73,8 @@ class RegistroController {
         $stmt->execute([$tipo_usuario, $id_referencia]);
         $ultimo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Si no hay registro previo o el último fue salida → entrada
+        // Si no hay registro previo o el último fue salida -> 'entrada'
         return (!$ultimo || $ultimo['tipo_movimiento'] === 'salida') ? 'entrada' : 'salida';
     }
 }
+

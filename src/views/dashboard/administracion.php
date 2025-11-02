@@ -30,7 +30,7 @@
             <a href="/qr_eys/public/configuracion"> Configuración</a>
         </nav>
         <div class="logout">
-            <a href="#">Cerrar sesión</a>
+            <a href="/qr_eys/public/logout">Cerrar sesión</a>
         </div>
     </aside>
 
@@ -88,16 +88,20 @@
     </main>
 
     <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('a[href*="/administracion/eliminar"]').forEach(link => {
-          try { link.removeAttribute('onclick'); } catch (_) {}
-          link.addEventListener('click', function (e) {
-            e.preventDefault();
-            const usuario = this.closest('tr')?.children[2]?.textContent.trim() || 'este administrador';
-            confirmarEliminacion(usuario).then(c => { if (c) window.location.href = this.href; });
-          });
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('a[href*="/administracion/eliminar"]').forEach(link => {
+                try {
+                    link.removeAttribute('onclick');
+                } catch (_) {}
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const usuario = this.closest('tr')?.children[2]?.textContent.trim() || 'este administrador';
+                    confirmarEliminacion(usuario).then(c => {
+                        if (c) window.location.href = this.href;
+                    });
+                });
+            });
         });
-      });
     </script>
 
 </body>

@@ -1,13 +1,39 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Citas | Renlo</title>
   <link rel="stylesheet" href="../public/css/dashboards.css">
   <script src="../public/js/dashboards.js" defer></script>
-  <style> .container{margin-left:250px;padding:30px} table{width:100%;border-collapse:collapse} th,td{padding:10px} thead{background:#0d6efd;color:#fff} tr:nth-child(odd){background:rgba(255,255,255,0.05)} </style>
+  <style>
+    .container {
+      margin-left: 250px;
+      padding: 30px
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse
+    }
+
+    th,
+    td {
+      padding: 10px
+    }
+
+    thead {
+      background: #0d6efd;
+      color: #fff
+    }
+
+    tr:nth-child(odd) {
+      background: rgba(255, 255, 255, 0.05)
+    }
+  </style>
 </head>
+
 <body>
   <aside class="sidebar">
     <div class="brand">
@@ -23,7 +49,7 @@
       <a href="/qr_eys/public/configuracion">Configuración</a>
     </nav>
     <div class="logout">
-      <a href="#">Cerrar sesión</a>
+      <a href="/qr_eys/public/logout">Cerrar sesión</a>
     </div>
   </aside>
 
@@ -33,7 +59,12 @@
       <table>
         <thead>
           <tr>
-            <th>ID</th><th>Cliente</th><th>Empleado</th><th>Fecha</th><th>Estado</th><th>Observaciones</th>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Empleado</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Observaciones</th>
           </tr>
         </thead>
         <tbody>
@@ -54,4 +85,5 @@
     <?php endif; ?>
   </main>
 </body>
+
 </html>

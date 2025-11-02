@@ -25,6 +25,14 @@ class ClienteModel
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function obtenerPorQR($codigo_qr)
+    {
+        $sql = "SELECT * FROM clientes WHERE codigo_qr = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$codigo_qr]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function insertarCliente($nombre, $correo, $telefono, $codigo_qr)
     {
         $sql = "INSERT INTO clientes (nombre, correo, telefono, codigo_qr, estado)

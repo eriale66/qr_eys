@@ -31,7 +31,7 @@ input[type="text"] {
 </style>
 </head>
 
-<?php include __DIR__ . '/../layout/header.php'; ?>
+<!-- <?php include __DIR__ . '/../layout/header.php'; ?> -->
 
 <body>
     <h2>Escanee su código QR</h2>

@@ -29,7 +29,7 @@
             <a href="/qr_eys/public/configuracion"> Configuración</a>
         </nav>
         <div class="logout">
-            <a href="#">Cerrar sesión</a>
+            <a href="/qr_eys/public/logout">Cerrar sesión</a>
         </div>
     </aside>
 

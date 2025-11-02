@@ -46,7 +46,7 @@ switch ($uri) {
         break;
 
     case '/registro':
-        echo "<h3>Ruta /registro detectada</h3>"; //  prueba
+        // echo "<h3>Ruta /registro detectada</h3>"; //  prueba
         (new RegistroController())->mostrarFormulario();
         break;
 
