@@ -4,11 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agregar Empleado | Renlo</title>
+    <title>Editar Administrador | Renlo</title>
     <link rel="stylesheet" href="/qr_eys/public/css/dashboards.css">
     <link rel="stylesheet" href="/qr_eys/public/css/empleados.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="../public/js/alerts.js" defer></script>
 </head>
 
 <body>
@@ -35,26 +33,28 @@
 
     <main class="main-content">
         <header>
-            <h1>Agregar Nuevo Empleado</h1>
+            <h1>Editar Administrador</h1>
         </header>
 
         <div class="form-container">
-            <form action="/qr_eys/public/empleados/guardar" method="POST" class="form-card">
+            <form action="/qr_eys/public/administracion/actualizar" method="POST" class="form-card">
+                <input type="hidden" name="id_usuario" value="<?= $admin['id_usuario'] ?>">
+
                 <label>Nombre completo</label>
-                <input type="text" name="nombre" required>
+                <input type="text" name="nombre" value="<?= htmlspecialchars($admin['nombre']) ?>" required>
 
-                <label>Puesto</label>
-                <input type="text" name="puesto" required>
+                <label>Usuario</label>
+                <input type="text" name="usuario" value="<?= htmlspecialchars($admin['usuario']) ?>" required>
 
-                <label>Correo electrónico</label>
-                <input type="email" name="correo" required>
-
-                <label>Teléfono</label>
-                <input type="text" name="telefono" required>
+                <label>Rol</label>
+                <select name="rol">
+                    <option value="admin" <?= $admin['rol'] === 'admin' ? 'selected' : '' ?>>Administrador</option>
+                    <option value="superadmin" <?= $admin['rol'] === 'superadmin' ? 'selected' : '' ?>>Super Administrador</option>
+                </select>
 
                 <div class="form-buttons">
-                    <button type="submit" class="btn primary">💾 Guardar</button>
-                    <a href="/qr_eys/public/empleados" class="btn danger">Cancelar</a>
+                    <button type="submit" class="btn primary">💾 Actualizar</button>
+                    <a href="/qr_eys/public/administracion" class="btn danger">Cancelar</a>
                 </div>
             </form>
         </div>

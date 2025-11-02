@@ -46,7 +46,8 @@ class EmpleadoController
         $filePath = $path . $empleado['nombre'] . ".png";
         $result->saveToFile($filePath);
 
-        echo "<script>alert('QR generado correctamente para {$empleado['nombre']}'); window.location.href='/qr_eys/public/empleados';</script>";
+        header("Location: /qr_eys/public/empleados?type=success&msg=" . urlencode("QR generado correctamente para {$empleado['nombre']}"));
+        exit;
     }
 
     public function exportarPDF()
@@ -114,8 +115,8 @@ class EmpleadoController
             $telefono = $_POST['telefono'] ?? '';
 
             if (empty($nombre) || empty($puesto) || empty($correo) || empty($telefono)) {
-                echo "<script>alert('Todos los campos son obligatorios'); window.location.href='/qr_eys/public/empleados/agregar';</script>";
-                return;
+                header("Location: /qr_eys/public/empleados/agregar?type=error&msg=" . urlencode('Todos los campos son obligatorios'));
+                exit;
             }
 
             // Generar un código QR único
@@ -124,7 +125,9 @@ class EmpleadoController
             // Guardar en la base de datos
             $this->empleadoModel->insertarEmpleado($nombre, $puesto, $correo, $telefono, $codigoQR);
 
-            echo "<script>alert('Empleado agregado correctamente'); window.location.href='/qr_eys/public/empleados';</script>";
+            header("Location: /qr_eys/public/empleados?type=success&msg=" . urlencode('Empleado agregado correctamente'));
+            exit;
+
         }
     }
 
@@ -144,15 +147,15 @@ class EmpleadoController
             $telefono = trim($_POST['telefono'] ?? '');
 
             if (empty($id) || empty($nombre) || empty($puesto) || empty($correo) || empty($telefono)) {
-                echo "<script>alert('Todos los campos son obligatorios'); window.history.back();</script>";
-                return;
+                header("Location: /qr_eys/public/empleados?type=error&msg=" . urlencode('Todos los campos son obligatorios'));
+                exit;
             }
 
             // Obtener datos actuales del empleado
             $empleadoActual = $this->empleadoModel->obtenerPorId($id);
             if (!$empleadoActual) {
-                echo "<script>alert('Empleado no encontrado'); window.location.href='/qr_eys/public/empleados';</script>";
-                return;
+                header("Location: /qr_eys/public/empleados?type=error&msg=" . urlencode('Empleado no encontrado'));
+                exit;
             }
 
             // Guardar el nombre actual del archivo QR
@@ -169,7 +172,8 @@ class EmpleadoController
                 rename($oldQRPath, $newQRPath);
             }
 
-            echo "<script>alert('Empleado actualizado correctamente'); window.location.href='/qr_eys/public/empleados';</script>";
+            header("Location: /qr_eys/public/empleados?type=success&msg=" . urlencode('Empleado actualizado correctamente'));
+            exit;
         }
     }
 
@@ -178,8 +182,8 @@ class EmpleadoController
         $empleado = $this->empleadoModel->obtenerPorId($id);
 
         if (!$empleado) {
-            echo "<script>alert('Empleado no encontrado'); window.location.href='/qr_eys/public/empleados';</script>";
-            return;
+            header("Location: /qr_eys/public/empleados?type=error&msg=" . urlencode('Empleado no encontrado'));
+            exit;
         }
 
         // Ruta del archivo QR correspondiente
@@ -191,9 +195,11 @@ class EmpleadoController
             if (file_exists($qrPath)) {
                 unlink($qrPath);
             }
-            echo "<script>alert('Empleado eliminado correctamente'); window.location.href='/qr_eys/public/empleados';</script>";
+            header("Location: /qr_eys/public/empleados?type=success&msg=" . urlencode('Empleado eliminado correctamente'));
+            exit;
         } else {
-            echo "<script>alert('Error al eliminar empleado'); window.location.href='/qr_eys/public/empleados';</script>";
+            header("Location: /qr_eys/public/empleados?type=error&msg=" . urlencode('Error al eliminar empleado'));
+            exit;
         }
     }
 }

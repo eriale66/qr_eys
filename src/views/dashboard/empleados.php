@@ -7,6 +7,8 @@
   <title>Empleados | Renlo</title>
   <link rel="stylesheet" href="../public/css/dashboards.css">
   <link rel="stylesheet" href="../public/css/empleados.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="../public/js/alerts.js" defer></script>
   <script src="../public/js/dashboards.js" defer></script>
   <script src="../public/js/empleados.js" defer></script>
 </head>
@@ -23,8 +25,9 @@
       <a href="/qr_eys/public/dashboard">Inicio</a>
       <a href="/qr_eys/public/empleados" class="active">Empleados</a>
       <a href="/qr_eys/public/clientes">Clientes</a>
-      <a href="/qr_eys/public/citas">Citas</a>
+      <!-- <a href="/qr_eys/public/citas">Citas</a> -->
       <a href="/qr_eys/public/reportes">Reportes</a>
+      <a href="/qr_eys/public/administracion">Administración</a>
       <a href="/qr_eys/public/configuracion">Configuración</a>
     </nav>
     <div class="logout">
@@ -97,7 +100,7 @@
                 <a href="/qr_eys/public/empleados/generarQR?id=<?= $e['id_empleado'] ?>" class="btn small">🎟 QR</a>
                 <a href="/qr_eys/public/empleados/editar?id=<?= $e['id_empleado'] ?>" class="btn edit">✏️ Editar</a>
                 <a href="/qr_eys/public/empleados/eliminar?id=<?= $e['id_empleado'] ?>"
-                  onclick="return confirm('¿Seguro que deseas eliminar a <?= htmlspecialchars($e['nombre']) ?>?')"
+                  onclick="event.preventDefault(); confirmarEliminacion('<?= htmlspecialchars($e['nombre']) ?>').then(c=>{ if(c) window.location.href=this.href; });"
                   class="btn danger small">🗑 Eliminar</a>
               </td>
 

@@ -4,6 +4,8 @@ require_once __DIR__ . '/../src/controllers/RegistroController.php';
 require_once __DIR__ . '/../src/controllers/LoginController.php';
 require_once __DIR__ . '/../src/controllers/EmpleadosController.php';
 require_once __DIR__ . '/../src/controllers/ClientesController.php';
+require_once __DIR__ . '/../src/controllers/AdminController.php';
+
 
 
 
@@ -181,6 +183,31 @@ switch ($uri) {
         (new ClienteController())->eliminarCliente($id);
         break;
 
+    case '/administracion':
+        (new AdminController())->index();
+        break;
+
+    case '/administracion/agregar':
+        (new AdminController())->mostrarFormularioAgregar();
+        break;
+
+    case '/administracion/guardar':
+        (new AdminController())->guardarAdmin();
+        break;
+
+    case '/administracion/editar':
+        $id = $_GET['id'] ?? null;
+        (new AdminController())->mostrarFormularioEditar($id);
+        break;
+
+    case '/administracion/actualizar':
+        (new AdminController())->actualizarAdmin();
+        break;
+
+    case '/administracion/eliminar':
+        $id = $_GET['id'] ?? null;
+        (new AdminController())->eliminarAdmin($id);
+        break;
     default:
         echo "<h1>404 - Página no encontrada</h1><p>Ruta: $uri</p>";
         break;

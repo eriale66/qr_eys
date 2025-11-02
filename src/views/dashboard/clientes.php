@@ -7,31 +7,33 @@
   <title>Clientes | Renlo</title>
   <link rel="stylesheet" href="../public/css/dashboards.css">
   <link rel="stylesheet" href="../public/css/empleados.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="../public/js/alerts.js" defer></script>
   <script src="../public/js/dashboards.js" defer></script>
   <script src="../public/js/empleados.js" defer></script>
 </head>
 
 <body>
 
-  <!-- ===== SIDEBAR ===== -->
+  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="brand">
       <h2>Renlo</h2>
       <p>Control de Acceso</p>
     </div>
     <nav>
-      <a href="/qr_eys/public/dashboard">Inicio</a>
-      <a href="/qr_eys/public/empleados" class="active">Empleados</a>
-      <a href="/qr_eys/public/clientes">Clientes</a>
-      <a href="/qr_eys/public/citas">Citas</a>
-      <a href="/qr_eys/public/reportes">Reportes</a>
-      <a href="/qr_eys/public/configuracion">Configuración</a>
+      <a href="/qr_eys/public/dashboard" class="active"> Inicio</a>
+      <a href="/qr_eys/public/empleados"> Empleados</a>
+      <a href="/qr_eys/public/clientes"> Clientes</a>
+      <!-- <a href="/qr_eys/public/citas"> Citas</a> -->
+      <a href="/qr_eys/public/reportes"> Reportes</a>
+      <a href="/qr_eys/public/administracion"> Administración</a>
+      <a href="/qr_eys/public/configuracion"> Configuración</a>
     </nav>
     <div class="logout">
-      <a href="/qr_eys/public/logout">Cerrar sesión</a>
+      <a href="#">Cerrar sesión</a>
     </div>
   </aside>
-
 
   <main class="main-content">
     <header>
@@ -102,6 +104,18 @@
       </table>
     </div>
   </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('a[href*="/clientes/eliminar"]').forEach(link => {
+        try { link.removeAttribute('onclick'); } catch (_) {}
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          const nombre = this.closest('tr')?.children[1]?.textContent.trim() || 'este cliente';
+          confirmarEliminacion(nombre).then(c => { if (c) window.location.href = this.href; });
+        });
+      });
+    });
+  </script>
 </body>
 
 </html>

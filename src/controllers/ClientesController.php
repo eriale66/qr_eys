@@ -32,14 +32,15 @@ class ClienteController {
             $telefono = $_POST['telefono'] ?? '';
 
             if (empty($nombre) || empty($correo) || empty($telefono)) {
-                echo "<script>alert('Todos los campos son obligatorios'); window.history.back();</script>";
-                return;
+                header("Location: /qr_eys/public/clientes?type=error&msg=" . urlencode('Todos los campos son obligatorios'));
+                exit;
             }
 
             $codigoQR = strtoupper(substr(md5(uniqid(rand(), true)), 0, 8));
             $this->clienteModel->insertarCliente($nombre, $correo, $telefono, $codigoQR);
 
-            echo "<script>alert('Cliente agregado correctamente'); window.location.href='/qr_eys/public/clientes';</script>";
+            header("Location: /qr_eys/public/clientes?type=success&msg=" . urlencode('Cliente agregado correctamente'));
+            exit;
         }
     }
 
@@ -66,8 +67,8 @@ class ClienteController {
     {
         $cliente = $this->clienteModel->obtenerPorId($id_cliente);
         if (!$cliente) {
-            echo "Cliente no encontrado";
-            return;
+            header("Location: /qr_eys/public/clientes?type=error&msg=" . urlencode('Cliente no encontrado'));
+            exit;
         }
 
         $builder = new Builder();
@@ -84,7 +85,8 @@ class ClienteController {
         $filePath = $path . $cliente['nombre'] . ".png";
         $result->saveToFile($filePath);
 
-        echo "<script>alert('QR generado correctamente para {$cliente['nombre']}'); window.location.href='/qr_eys/public/clientes';</script>";
+        header("Location: /qr_eys/public/clientes?type=success&msg=" . urlencode("QR generado correctamente para {$cliente['nombre']}"));
+        exit;
     }
 
     public function mostrarFormularioEditar($id) {
@@ -100,14 +102,14 @@ class ClienteController {
             $telefono = $_POST['telefono'] ?? '';
 
             if (empty($id) || empty($nombre) || empty($correo) || empty($telefono)) {
-                echo "<script>alert('Todos los campos son obligatorios'); window.history.back();</script>";
-                return;
+                header("Location: /qr_eys/public/clientes?type=error&msg=" . urlencode('Todos los campos son obligatorios'));
+                exit;
             }
 
             $clienteActual = $this->clienteModel->obtenerPorId($id);
             if (!$clienteActual) {
-                echo "<script>alert('Cliente no encontrado'); window.location.href='/qr_eys/public/clientes';</script>";
-                return;
+                header("Location: /qr_eys/public/clientes?type=error&msg=" . urlencode('Cliente no encontrado'));
+                exit;
             }
 
             $qrDir = __DIR__ . "/../../public/qr_clientes/";
@@ -121,7 +123,8 @@ class ClienteController {
                 rename($oldQRPath, $newQRPath);
             }
 
-            echo "<script>alert('Cliente actualizado correctamente'); window.location.href='/qr_eys/public/clientes';</script>";
+            header("Location: /qr_eys/public/clientes?type=success&msg=" . urlencode('Cliente actualizado correctamente'));
+            exit;
         }
     }
 
@@ -129,17 +132,19 @@ class ClienteController {
         $cliente = $this->clienteModel->obtenerPorId($id);
 
         if (!$cliente) {
-            echo "<script>alert('Cliente no encontrado'); window.location.href='/qr_eys/public/clientes';</script>";
-            return;
+            header("Location: /qr_eys/public/clientes?type=error&msg=" . urlencode('Cliente no encontrado'));
+            exit;
         }
 
         $qrPath = __DIR__ . "/../../public/qr_clientes/" . $cliente['nombre'] . ".png";
 
         if ($this->clienteModel->eliminarCliente($id)) {
             if (file_exists($qrPath)) unlink($qrPath);
-            echo "<script>alert('Cliente eliminado correctamente'); window.location.href='/qr_eys/public/clientes';</script>";
+            header("Location: /qr_eys/public/clientes?type=success&msg=" . urlencode('Cliente eliminado correctamente'));
+            exit;
         } else {
-            echo "<script>alert('Error al eliminar cliente'); window.location.href='/qr_eys/public/clientes';</script>";
+            header("Location: /qr_eys/public/clientes?type=error&msg=" . urlencode('Error al eliminar cliente'));
+            exit;
         }
     }
 

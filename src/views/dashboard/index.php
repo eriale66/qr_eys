@@ -25,8 +25,9 @@
       <a href="/qr_eys/public/dashboard" class="active"> Inicio</a>
       <a href="/qr_eys/public/empleados"> Empleados</a>
       <a href="/qr_eys/public/clientes"> Clientes</a>
-      <a href="/qr_eys/public/citas"> Citas</a>
+      <!-- <a href="/qr_eys/public/citas"> Citas</a> -->
       <a href="/qr_eys/public/reportes"> Reportes</a>
+      <a href="/qr_eys/public/administracion"> Administración</a>
       <a href="/qr_eys/public/configuracion"> Configuración</a>
     </nav>
     <div class="logout">
