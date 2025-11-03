@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../public/js/alerts.js" defer></script>
     <script src="../public/js/dashboards.js" defer></script>
+    <script src="../public/js/empleados.js" defer></script>
 </head>
 
 <body>
@@ -21,82 +22,116 @@
             <p>Control de Acceso</p>
         </div>
         <nav>
-            <a href="/qr_eys/public/dashboard" class="active"> Inicio</a>
-            <a href="/qr_eys/public/empleados"> Empleados</a>
-            <a href="/qr_eys/public/clientes"> Clientes</a>
-            <!-- <a href="/qr_eys/public/citas"> Citas</a> -->
-            <a href="/qr_eys/public/reportes"> Reportes</a>
-            <a href="/qr_eys/public/administracion"> Administración</a>
-            <a href="/qr_eys/public/configuracion"> Configuración</a>
+            <a href="/qr_eys/public/dashboard">Inicio</a>
+            <a href="/qr_eys/public/empleados">Empleados</a>
+            <a href="/qr_eys/public/clientes">Clientes</a>
+            <a href="/qr_eys/public/reportes">Reportes</a>
+            <a href="/qr_eys/public/administracion" class="active">Administración</a>
+            <a href="/qr_eys/public/configuracion">Configuración</a>
         </nav>
         <div class="logout">
             <a href="/qr_eys/public/logout">Cerrar sesión</a>
         </div>
     </aside>
 
+    <!-- ===== CONTENIDO PRINCIPAL ===== -->
     <main class="main-content">
-        <header>
-            <h1>Gestión de Administradores</h1>
+        <header class="page-header">
+            <div>
+                <h1>Gestión de Administradores</h1>
+                <p class="subtitle">Administra y controla los administradores</p>
+            </div>
+            <div class="header-stats">
+                <div class="stat-badge">
+                    <span class="stat-icon">👤</span>
+                    <div>
+                        <small>Total</small>
+                        <strong><?= count($usuarios) ?></strong>
+                    </div>
+                </div>
+            </div>
         </header>
 
-        <div class="container">
-            <div class="panel-info">
-                <div class="info-box">
-                    <h4>Total de administradores</h4>
-                    <p><?= count($usuarios) ?></p>
+        <section class="container">
+            <div class="toolbar-advanced">
+                <div class="toolbar-left">
+                    <a href="/qr_eys/public/administracion/agregar" class="btn-action primary">
+                        <span class="btn-icon">＋</span>
+                        <span class="btn-text">Nuevo Administrador</span>
+                    </a>
+                </div>
+                <div class="toolbar-right">
+                    <div class="search-box">
+                        <span class="search-icon">🔎</span>
+                        <input type="text" id="buscador" placeholder="Buscar administrador...">
+                    </div>
                 </div>
             </div>
 
-            <div class="toolbar">
-                <div class="left">
-                    <a href="/qr_eys/public/administracion/agregar" class="btn primary"> Agregar Administrador</a>
-                </div>
-                <div class="right">
-                    <input type="text" id="buscador" placeholder="Buscar administrador...">
-                </div>
-            </div>
-
-            <table class="tabla">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Nombre</th>
-                        <th>Usuario</th>
-                        <th>Rol</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php $i = 1;
-                    foreach ($usuarios as $u): ?>
+            <div class="table-wrapper">
+                <table class="tabla-moderna">
+                    <thead>
                         <tr>
-                            <td><?= $i++ ?></td>
-                            <td><?= htmlspecialchars($u['nombre']) ?></td>
-                            <td><?= htmlspecialchars($u['usuario']) ?></td>
-                            <td><?= htmlspecialchars($u['rol']) ?></td>
-                            <td class="acciones">
-                                <a href="/qr_eys/public/administracion/editar?id=<?= $u['id_usuario'] ?>" class="btn edit"> Editar</a>
-                                <a href="/qr_eys/public/administracion/eliminar?id=<?= $u['id_usuario'] ?>"
-                                    onclick="return confirm('¿Eliminar al administrador <?= htmlspecialchars($u['usuario']) ?>?')"
-                                    class="btn danger small"> Eliminar</a>
-                            </td>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>Usuario</th>
+                            <th>Rol</th>
+                            <th>Acciones</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        <?php $i = 1; foreach ($usuarios as $u): ?>
+                            <?php
+                                $rol = strtolower($u['rol']);
+                                $rolClass = 'usuario';
+                                if (strpos($rol, 'admin') !== false) {
+                                    $rolClass = 'administrador';
+                                } elseif (strpos($rol, 'super') !== false) {
+                                    $rolClass = 'supervisor';
+                                }
+                            ?>
+                            <tr class="table-row">
+                                <td class="row-number"><?= $i++ ?></td>
+                                <td>
+                                    <div class="employee-info">
+                                        <div class="employee-avatar" style="background: linear-gradient(135deg, #e5383b, #dc2f02);">
+                                            <?= strtoupper(substr($u['nombre'], 0, 2)) ?>
+                                        </div>
+                                        <strong><?= htmlspecialchars($u['nombre']) ?></strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge-usuario">@<?= htmlspecialchars($u['usuario']) ?></span>
+                                </td>
+                                <td>
+                                    <span class="badge-rol <?= $rolClass ?>"><?= htmlspecialchars($u['rol']) ?></span>
+                                </td>
+                                <td class="action-cell">
+                                    <div class="action-buttons">
+                                        <a href="/qr_eys/public/administracion/editar?id=<?= $u['id_usuario'] ?>"
+                                           class="btn-icon-action edit"
+                                           title="Editar">✏️</a>
+                                        <a href="/qr_eys/public/administracion/eliminar?id=<?= $u['id_usuario'] ?>"
+                                           class="btn-icon-action delete delete-admin"
+                                           title="Eliminar"
+                                           data-nombre="<?= htmlspecialchars($u['usuario']) ?>">🗑️</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('a[href*="/administracion/eliminar"]').forEach(link => {
-                try {
-                    link.removeAttribute('onclick');
-                } catch (_) {}
+            document.querySelectorAll('.delete-admin').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const usuario = this.closest('tr')?.children[2]?.textContent.trim() || 'este administrador';
-                    confirmarEliminacion(usuario).then(c => {
+                    const nombre = this.getAttribute('data-nombre') || 'este administrador';
+                    confirmarEliminacion(nombre).then(c => {
                         if (c) window.location.href = this.href;
                     });
                 });
@@ -107,3 +142,4 @@
 </body>
 
 </html>
+

@@ -60,10 +60,10 @@
       <p>Control de Acceso</p>
     </div>
     <nav>
-      <a href="/qr_eys/public/dashboard" class="active">Inicio</a>
+      <a href="/qr_eys/public/dashboard">Inicio</a>
       <a href="/qr_eys/public/empleados">Empleados</a>
       <a href="/qr_eys/public/clientes">Clientes</a>
-      <a href="/qr_eys/public/reportes">Reportes</a>
+      <a href="/qr_eys/public/reportes" class="active">Reportes</a>
       <a href="/qr_eys/public/administracion">Administración</a>
       <a href="/qr_eys/public/configuracion">Configuración</a>
     </nav>
