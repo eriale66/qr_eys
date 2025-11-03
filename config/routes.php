@@ -5,6 +5,7 @@ require_once __DIR__ . '/../src/controllers/LoginController.php';
 require_once __DIR__ . '/../src/controllers/EmpleadosController.php';
 require_once __DIR__ . '/../src/controllers/ClientesController.php';
 require_once __DIR__ . '/../src/controllers/AdminController.php';
+require_once __DIR__ . '/../src/controllers/ReportesController.php';
 
 
 
@@ -96,7 +97,29 @@ switch ($uri) {
             header("Location: /qr_eys/public/login");
             exit;
         }
-        (new DashboardController())->reportes();
+        (new ReportesController())->index();
+        break;
+
+    case '/reportes/pdf':
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        if (!isset($_SESSION['usuario'])) {
+            header("Location: /qr_eys/public/login");
+            exit;
+        }
+        (new ReportesController())->exportPdf();
+        break;
+
+    case '/reportes/excel':
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        if (!isset($_SESSION['usuario'])) {
+            header("Location: /qr_eys/public/login");
+            exit;
+        }
+        (new ReportesController())->exportExcel();
         break;
 
     case '/configuracion':
