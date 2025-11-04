@@ -129,14 +129,11 @@
                                 </td>
                                 <td class="action-cell">
                                     <div class="action-buttons">
-                                        <a href="/qr_eys/public/administracion/editar?id=<?= $u['id_usuario'] ?>"
-                                            class="btn-icon-action edit"
-                                            title="Editar"> <i class="fa-solid fa-pen"></i>
+                                        <a href="/qr_eys/public/administracion/editar?id=<?= $u['id_usuario'] ?>" class="btn-icon-action edit" title="Editar">
+                                            <i class="fa-solid fa-pen"></i>
                                         </a>
-                                        <a href="/qr_eys/public/administracion/eliminar?id=<?= $u['id_usuario'] ?>"
-                                            class="btn-icon-action delete delete-admin"
-                                            title="Eliminar"
-                                            data-nombre="<?= htmlspecialchars($u['usuario']) ?>"> <i class="fa-solid fa-trash"></i>
+                                        <a href="/qr_eys/public/administracion/eliminar?id=<?= $u['id_usuario'] ?>" class="btn-icon-action delete delete-admin" title="Eliminar" data-nombre="<?= htmlspecialchars($u['usuario']) ?>">
+                                            <i class="fa-solid fa-trash"></i>
                                         </a>
                                     </div>
                                 </td>

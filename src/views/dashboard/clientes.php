@@ -155,20 +155,13 @@
                 </td>
                 <td class="action-cell">
                   <div class="action-buttons">
-                    <a href="/qr_eys/public/clientes/generarQR?id=<?= $c['id_cliente'] ?>"
-                      class="btn-icon-action qr"
-                      title="Generar QR">
+                    <a href="/qr_eys/public/clientes/generarQR?id=<?= $c['id_cliente'] ?>" class="btn-icon-action qr" title="Generar QR">
                       <i class="fa-solid fa-qrcode"></i>
                     </a>
-                    <a href="/qr_eys/public/clientes/editar?id=<?= $c['id_cliente'] ?>"
-                      class="btn-icon-action edit"
-                      title="Editar">
+                    <a href="/qr_eys/public/clientes/editar?id=<?= $c['id_cliente'] ?>" class="btn-icon-action edit" title="Editar">
                       <i class="fa-solid fa-pen"></i>
                     </a>
-                    <a href="/qr_eys/public/clientes/eliminar?id=<?= $c['id_cliente'] ?>"
-                      class="btn-icon-action delete delete-cliente"
-                      title="Eliminar"
-                      data-nombre="<?= htmlspecialchars($c['nombre']) ?>">
+                    <a href="/qr_eys/public/clientes/eliminar?id=<?= $c['id_cliente'] ?>" class="btn-icon-action delete delete-cliente" title="Eliminar" data-nombre="<?= htmlspecialchars($c['nombre']) ?>">
                       <i class="fa-solid fa-trash"></i>
                     </a>
                   </div>

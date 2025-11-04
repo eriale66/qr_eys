@@ -157,20 +157,13 @@
                 </td>
                 <td class="action-cell">
                   <div class="action-buttons">
-                    <a href="/qr_eys/public/empleados/generarQR?id=<?= $e['id_empleado'] ?>"
-                      class="btn-icon-action qr"
-                      title="Generar QR">
+                    <a href="/qr_eys/public/empleados/generarQR?id=<?= $e['id_empleado'] ?>" class="btn-icon-action qr" title="Generar QR">
                       <i class="fa-solid fa-qrcode"></i>
                     </a>
-                    <a href="/qr_eys/public/empleados/editar?id=<?= $e['id_empleado'] ?>"
-                      class="btn-icon-action edit"
-                      title="Editar">
+                    <a href="/qr_eys/public/empleados/editar?id=<?= $e['id_empleado'] ?>" class="btn-icon-action edit" title="Editar">
                       <i class="fa-solid fa-pen"></i>
                     </a>
-                    <a href="/qr_eys/public/empleados/eliminar?id=<?= $e['id_empleado'] ?>"
-                      onclick="event.preventDefault(); confirmarEliminacion('<?= htmlspecialchars($e['nombre']) ?>').then(c=>{ if(c) window.location.href=this.href; });"
-                      class="btn-icon-action delete"
-                      title="Eliminar">
+                    <a href="/qr_eys/public/empleados/eliminar?id=<?= $e['id_empleado'] ?>" onclick="event.preventDefault(); confirmarEliminacion('<?= htmlspecialchars($e['nombre']) ?>').then(c=>{ if(c) window.location.href=this.href; });" class="btn-icon-action delete" title="Eliminar">
                       <i class="fa-solid fa-trash"></i>
                     </a>
                   </div>
