@@ -1,58 +1,138 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reportes y Estadísticas | Renlo</title>
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="/qr_eys/public/css/dashboards.css">
   <link rel="stylesheet" href="/qr_eys/public/css/reportes.css">
   <script src="/qr_eys/public/js/dashboards.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="/qr_eys/public/js/reportes.js" defer></script>
   <style>
-    .container { margin-left: 250px; padding: 30px }
-    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px }
-    .card { background: #1b1f25; padding: 20px; border-radius: 10px; text-align: center }
-    .accent { color: #4cc9f0 }
-    .filters { background: #14181f; padding: 16px; border-radius: 8px; margin-bottom: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px }
-    .filters label { display: block; font-size: 12px; margin-bottom: 6px; opacity: .85 }
-    .filters select, .filters input { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #2a2f39; background: #0f1218; color: #fff }
-    .filters .actions { display: flex; gap: 10px; align-items: end }
-    .btn { background: #0d6efd; color: #fff; border: none; padding: 10px 14px; border-radius: 6px; cursor: pointer; text-decoration: none; text-align: center }
-    .btn.secondary { background: #198754 }
-    table { width: 100%; border-collapse: collapse }
-    th, td { padding: 10px }
-    thead { background: #0d6efd; color: #fff }
-    tr:nth-child(odd) { background: rgba(255, 255, 255, 0.05) }
+    .container {
+      margin-left: 250px;
+      padding: 30px
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px
+    }
+
+    .card {
+      background: #1b1f25;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center
+    }
+
+    .accent {
+      color: #4cc9f0
+    }
+
+    .filters {
+      background: #14181f;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px
+    }
+
+    .filters label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 6px;
+      opacity: .85
+    }
+
+    .filters select,
+    .filters input {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #2a2f39;
+      background: #0f1218;
+      color: #fff
+    }
+
+    .filters .actions {
+      display: flex;
+      gap: 10px;
+      align-items: end
+    }
+
+    .btn {
+      background: #0d6efd;
+      color: #fff;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center
+    }
+
+    .btn.secondary {
+      background: #198754
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse
+    }
+
+    th,
+    td {
+      padding: 10px
+    }
+
+    thead {
+      background: #0d6efd;
+      color: #fff
+    }
+
+    tr:nth-child(odd) {
+      background: rgba(255, 255, 255, 0.05)
+    }
   </style>
   <?php
-    $registros = $registros ?? [];
-    $totalEntradas = $totalEntradas ?? 0;
-    $totalSalidas = $totalSalidas ?? 0;
-    $empleados = $empleados ?? [];
-    $clientes = $clientes ?? [];
-    $chartLabels = $chartLabels ?? [];
-    $chartEntradas = $chartEntradas ?? [];
-    $chartSalidas = $chartSalidas ?? [];
-    $tipo = $_GET['tipo'] ?? '';
-    $id_referencia = $_GET['id_referencia'] ?? '';
-    $mov = $_GET['mov'] ?? '';
-    $periodo = $_GET['periodo'] ?? 'hoy';
-    $agrupacion = $_GET['agrupacion'] ?? 'dia';
-    $desde = $_GET['desde'] ?? date('Y-m-d');
-    $hasta = $_GET['hasta'] ?? date('Y-m-d');
-    $aggLabels = $aggLabels ?? [];
-    $aggEntradas = $aggEntradas ?? [];
-    $aggSalidas = $aggSalidas ?? [];
-    $aggTotales = $aggTotales ?? [];
-    $aggEmp = $aggEmp ?? [];
-    $aggCli = $aggCli ?? [];
-    $topEmpNombres = $topEmpNombres ?? [];
-    $topEmpValores = $topEmpValores ?? [];
-    $topCliNombres = $topCliNombres ?? [];
-    $topCliValores = $topCliValores ?? [];
+  $registros = $registros ?? [];
+  $totalEntradas = $totalEntradas ?? 0;
+  $totalSalidas = $totalSalidas ?? 0;
+  $empleados = $empleados ?? [];
+  $clientes = $clientes ?? [];
+  $chartLabels = $chartLabels ?? [];
+  $chartEntradas = $chartEntradas ?? [];
+  $chartSalidas = $chartSalidas ?? [];
+  $tipo = $_GET['tipo'] ?? '';
+  $id_referencia = $_GET['id_referencia'] ?? '';
+  $mov = $_GET['mov'] ?? '';
+  $periodo = $_GET['periodo'] ?? 'hoy';
+  $agrupacion = $_GET['agrupacion'] ?? 'dia';
+  $desde = $_GET['desde'] ?? date('Y-m-d');
+  $hasta = $_GET['hasta'] ?? date('Y-m-d');
+  $aggLabels = $aggLabels ?? [];
+  $aggEntradas = $aggEntradas ?? [];
+  $aggSalidas = $aggSalidas ?? [];
+  $aggTotales = $aggTotales ?? [];
+  $aggEmp = $aggEmp ?? [];
+  $aggCli = $aggCli ?? [];
+  $topEmpNombres = $topEmpNombres ?? [];
+  $topEmpValores = $topEmpValores ?? [];
+  $topCliNombres = $topCliNombres ?? [];
+  $topCliValores = $topCliValores ?? [];
   ?>
 </head>
+
 <body>
   <aside class="sidebar">
     <div class="brand">
@@ -60,15 +140,32 @@
       <p>Control de Acceso</p>
     </div>
     <nav>
-      <a href="/qr_eys/public/dashboard">Inicio</a>
-      <a href="/qr_eys/public/empleados">Empleados</a>
-      <a href="/qr_eys/public/clientes">Clientes</a>
-      <a href="/qr_eys/public/reportes" class="active">Reportes</a>
-      <a href="/qr_eys/public/administracion">Administración</a>
-      <a href="/qr_eys/public/configuracion">Configuración</a>
+      <a href="/qr_eys/public/dashboard">
+        <i class="fa-solid fa-house"></i>
+        <span>Inicio</span>
+      </a>
+      <a href="/qr_eys/public/empleados">
+        <i class="fa-solid fa-user-tie"></i>
+        <span>Empleados</span>
+      </a>
+      <a href="/qr_eys/public/clientes">
+        <i class="fa-solid fa-users"></i>
+        <span>Clientes</span>
+      </a>
+      <a href="/qr_eys/public/reportes" class="active">
+        <i class="fa-solid fa-chart-line"></i>
+        <span>Reportes</span>
+      </a>
+      <a href="/qr_eys/public/administracion">
+        <i class="fa-solid fa-user-shield"></i>
+        <span>Administración</span>
+      </a>
     </nav>
     <div class="logout">
-      <a href="/qr_eys/public/logout">Cerrar sesión</a>
+      <a href="/qr_eys/public/logout">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span>Cerrar sesión</span>
+      </a>
     </div>
   </aside>
 
@@ -85,29 +182,29 @@
         <label for="tipo">Tipo de usuario</label>
         <select id="tipo" name="tipo">
           <option value="">Todos</option>
-          <option value="empleado" <?= $tipo==='empleado'?'selected':'' ?>>Empleado</option>
-          <option value="cliente" <?= $tipo==='cliente'?'selected':'' ?>>Cliente</option>
+          <option value="empleado" <?= $tipo === 'empleado' ? 'selected' : '' ?>>Empleado</option>
+          <option value="cliente" <?= $tipo === 'cliente' ? 'selected' : '' ?>>Cliente</option>
         </select>
       </div>
 
-      <div id="empleadoSelect" class="filter-group" style="display: <?= $tipo==='empleado'?'block':'none' ?>;">
+      <div id="empleadoSelect" class="filter-group" style="display: <?= $tipo === 'empleado' ? 'block' : 'none' ?>;">
         <label for="id_referencia_empleado">Empleado</label>
         <select id="id_referencia_empleado">
           <option value="">Todos</option>
           <?php foreach ($empleados as $e): ?>
-            <option value="<?= htmlspecialchars($e['id_empleado']) ?>" <?= ($tipo==='empleado' && (string)$id_referencia===(string)$e['id_empleado'])?'selected':'' ?>>
+            <option value="<?= htmlspecialchars($e['id_empleado']) ?>" <?= ($tipo === 'empleado' && (string)$id_referencia === (string)$e['id_empleado']) ? 'selected' : '' ?>>
               <?= htmlspecialchars($e['nombre']) ?>
             </option>
           <?php endforeach; ?>
         </select>
       </div>
 
-      <div id="clienteSelect" class="filter-group" style="display: <?= $tipo==='cliente'?'block':'none' ?>;">
+      <div id="clienteSelect" class="filter-group" style="display: <?= $tipo === 'cliente' ? 'block' : 'none' ?>;">
         <label for="id_referencia_cliente">Cliente</label>
         <select id="id_referencia_cliente">
           <option value="">Todos</option>
           <?php foreach ($clientes as $c): ?>
-            <option value="<?= htmlspecialchars($c['id_cliente']) ?>" <?= ($tipo==='cliente' && (string)$id_referencia===(string)$c['id_cliente'])?'selected':'' ?>>
+            <option value="<?= htmlspecialchars($c['id_cliente']) ?>" <?= ($tipo === 'cliente' && (string)$id_referencia === (string)$c['id_cliente']) ? 'selected' : '' ?>>
               <?= htmlspecialchars($c['nombre']) ?>
             </option>
           <?php endforeach; ?>
@@ -120,70 +217,70 @@
         <label for="mov">Movimiento</label>
         <select id="mov" name="mov">
           <option value="">Todos</option>
-          <option value="entrada" <?= $mov==='entrada'?'selected':'' ?>>Entradas</option>
-          <option value="salida" <?= $mov==='salida'?'selected':'' ?>>Salidas</option>
+          <option value="entrada" <?= $mov === 'entrada' ? 'selected' : '' ?>>Entradas</option>
+          <option value="salida" <?= $mov === 'salida' ? 'selected' : '' ?>>Salidas</option>
         </select>
       </div>
 
       <div class="filter-group">
         <label for="periodo">Periodo</label>
         <select id="periodo" name="periodo">
-          <option value="hoy" <?= $periodo==='hoy'?'selected':'' ?>>Hoy</option>
-          <option value="semana" <?= $periodo==='semana'?'selected':'' ?>>Esta semana</option>
-          <option value="mes" <?= $periodo==='mes'?'selected':'' ?>>Este mes</option>
-          <option value="rango" <?= $periodo==='rango'?'selected':'' ?>>Rango</option>
+          <option value="hoy" <?= $periodo === 'hoy' ? 'selected' : '' ?>>Hoy</option>
+          <option value="semana" <?= $periodo === 'semana' ? 'selected' : '' ?>>Esta semana</option>
+          <option value="mes" <?= $periodo === 'mes' ? 'selected' : '' ?>>Este mes</option>
+          <option value="rango" <?= $periodo === 'rango' ? 'selected' : '' ?>>Rango</option>
         </select>
       </div>
 
       <div class="filter-group">
         <label for="agrupacion">Agrupar por</label>
         <select id="agrupacion" name="agrupacion">
-          <option value="dia" <?= $agrupacion==='dia'?'selected':'' ?>>Día</option>
-          <option value="semana" <?= $agrupacion==='semana'?'selected':'' ?>>Semana</option>
-          <option value="mes" <?= $agrupacion==='mes'?'selected':'' ?>>Mes</option>
+          <option value="dia" <?= $agrupacion === 'dia' ? 'selected' : '' ?>>Día</option>
+          <option value="semana" <?= $agrupacion === 'semana' ? 'selected' : '' ?>>Semana</option>
+          <option value="mes" <?= $agrupacion === 'mes' ? 'selected' : '' ?>>Mes</option>
         </select>
       </div>
 
       <div class="filter-group">
         <label for="desde">Desde</label>
-        <input type="date" id="desde" name="desde" value="<?= htmlspecialchars($desde) ?>" <?= $periodo!=='rango' ? 'disabled' : '' ?>>
+        <input type="date" id="desde" name="desde" value="<?= htmlspecialchars($desde) ?>" <?= $periodo !== 'rango' ? 'disabled' : '' ?>>
       </div>
       <div class="filter-group">
         <label for="hasta">Hasta</label>
-        <input type="date" id="hasta" name="hasta" value="<?= htmlspecialchars($hasta) ?>" <?= $periodo!=='rango' ? 'disabled' : '' ?>>
+        <input type="date" id="hasta" name="hasta" value="<?= htmlspecialchars($hasta) ?>" <?= $periodo !== 'rango' ? 'disabled' : '' ?>>
       </div>
 
       <div class="filter-actions">
         <button type="submit" class="btn-filter">
-          <span>📊</span> Filtrar
+          <span><i class="fa-solid fa-filter"></i></span> Filtrar
         </button>
         <?php $qsStr = http_build_query($_GET ?? []); ?>
         <a class="btn-export pdf" href="/qr_eys/public/reportes/pdf?<?= htmlspecialchars($qsStr) ?>">
-          <span>📄</span> PDF
+          <span><i class="fa-solid fa-file-pdf"></i></span> PDF
         </a>
         <a class="btn-export excel" href="/qr_eys/public/reportes/excel?<?= htmlspecialchars($qsStr) ?>">
-          <span>📊</span> Excel
+          <span><i class="fa-solid fa-file-excel"></i></span> Excel
         </a>
       </div>
     </form>
 
     <section class="stats-grid">
       <div class="stat-card total">
-        <div class="stat-icon">📋</div>
+        <div class="stat-icon"><i class="fa-solid fa-clipboard"></i></div>
         <div class="stat-content">
           <h3>Total de registros</h3>
           <p class="stat-value"><?= isset($registros) ? count($registros) : 0 ?></p>
         </div>
       </div>
       <div class="stat-card entrada">
-        <div class="stat-icon">📥</div>
+        <div class="stat-icon"><i class="fa-solid fa-inbox"></i></div>
         <div class="stat-content">
           <h3>Total de entradas</h3>
           <p class="stat-value"><?= $totalEntradas ?? 0 ?></p>
         </div>
       </div>
       <div class="stat-card salida">
-        <div class="stat-icon">📤</div>
+        <div class="stat-icon"><i class="fa-solid fa-inbox"></i></div>
         <div class="stat-content">
           <h3>Total de salidas</h3>
           <p class="stat-value"><?= $totalSalidas ?? 0 ?></p>
@@ -281,7 +378,7 @@
         </div>
       <?php else: ?>
         <div class="empty-state">
-          <div class="empty-icon">📊</div>
+          <div class="empty-icon"><i class="fa-solid fa-chart-simple"></i></div>
           <p>No hay registros disponibles</p>
           <small>Ajusta los filtros para ver resultados</small>
         </div>
@@ -337,12 +434,11 @@
       type: 'line',
       data: {
         labels,
-        datasets: [
-          { 
-            label: 'Entradas', 
-            data: entradas, 
-            borderColor: '#4cc9f0', 
-            backgroundColor: 'rgba(76, 201, 240, .15)', 
+        datasets: [{
+            label: 'Entradas',
+            data: entradas,
+            borderColor: '#4cc9f0',
+            backgroundColor: 'rgba(76, 201, 240, .15)',
             tension: .4,
             fill: true,
             borderWidth: 3,
@@ -352,11 +448,11 @@
             pointBorderColor: '#fff',
             pointBorderWidth: 2
           },
-          { 
-            label: 'Salidas', 
-            data: salidas, 
-            borderColor: '#ef476f', 
-            backgroundColor: 'rgba(239, 71, 111, .15)', 
+          {
+            label: 'Salidas',
+            data: salidas,
+            borderColor: '#ef476f',
+            backgroundColor: 'rgba(239, 71, 111, .15)',
             tension: .4,
             fill: true,
             borderWidth: 3,
@@ -368,8 +464,8 @@
           }
         ]
       },
-      options: { 
-        responsive: true, 
+      options: {
+        responsive: true,
         maintainAspectRatio: false,
         interaction: {
           mode: 'index',
@@ -383,7 +479,9 @@
             labels: {
               usePointStyle: true,
               padding: 15,
-              font: { size: 12 }
+              font: {
+                size: 12
+              }
             }
           },
           tooltip: {
@@ -391,21 +489,32 @@
             padding: 12,
             borderColor: 'rgba(76, 201, 240, 0.3)',
             borderWidth: 1,
-            titleFont: { size: 13, weight: 'bold' },
-            bodyFont: { size: 12 },
+            titleFont: {
+              size: 13,
+              weight: 'bold'
+            },
+            bodyFont: {
+              size: 12
+            },
             cornerRadius: 6
           }
         },
-        scales: { 
-          y: { 
-            beginAtZero: true, 
-            ticks: { stepSize: 1 },
-            grid: { color: 'rgba(169, 179, 193, 0.08)' }
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            },
+            grid: {
+              color: 'rgba(169, 179, 193, 0.08)'
+            }
           },
           x: {
-            grid: { display: false }
+            grid: {
+              display: false
+            }
           }
-        } 
+        }
       }
     });
 
@@ -418,35 +527,34 @@
       type: 'bar',
       data: {
         labels: aggLabels,
-        datasets: [
-          { 
-            label: 'Total', 
-            data: aggTotales, 
-            backgroundColor: 'rgba(13, 110, 253, .6)', 
-            borderColor: '#0d6efd', 
+        datasets: [{
+            label: 'Total',
+            data: aggTotales,
+            backgroundColor: 'rgba(13, 110, 253, .6)',
+            borderColor: '#0d6efd',
             borderWidth: 2,
             borderRadius: 6
           },
-          { 
-            label: 'Entradas', 
-            data: aggEntradas, 
-            backgroundColor: 'rgba(76, 201, 240, .5)', 
-            borderColor: '#4cc9f0', 
+          {
+            label: 'Entradas',
+            data: aggEntradas,
+            backgroundColor: 'rgba(76, 201, 240, .5)',
+            borderColor: '#4cc9f0',
             borderWidth: 2,
             borderRadius: 6
           },
-          { 
-            label: 'Salidas', 
-            data: aggSalidas, 
-            backgroundColor: 'rgba(239, 71, 111, .5)', 
-            borderColor: '#ef476f', 
+          {
+            label: 'Salidas',
+            data: aggSalidas,
+            backgroundColor: 'rgba(239, 71, 111, .5)',
+            borderColor: '#ef476f',
             borderWidth: 2,
             borderRadius: 6
           },
         ]
       },
-      options: { 
-        responsive: true, 
+      options: {
+        responsive: true,
         maintainAspectRatio: false,
         plugins: {
           legend: {
@@ -456,7 +564,9 @@
             labels: {
               usePointStyle: true,
               padding: 15,
-              font: { size: 12 }
+              font: {
+                size: 12
+              }
             }
           },
           tooltip: {
@@ -467,16 +577,22 @@
             cornerRadius: 6
           }
         },
-        scales: { 
-          y: { 
-            beginAtZero: true, 
-            ticks: { stepSize: 1 },
-            grid: { color: 'rgba(169, 179, 193, 0.08)' }
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            },
+            grid: {
+              color: 'rgba(169, 179, 193, 0.08)'
+            }
           },
           x: {
-            grid: { display: false }
+            grid: {
+              display: false
+            }
           }
-        } 
+        }
       }
     });
 
@@ -487,12 +603,11 @@
       type: 'line',
       data: {
         labels: aggLabels,
-        datasets: [
-          { 
-            label: 'Empleados', 
-            data: aggEmp, 
-            borderColor: '#20c997', 
-            backgroundColor: 'rgba(32, 201, 151, .15)', 
+        datasets: [{
+            label: 'Empleados',
+            data: aggEmp,
+            borderColor: '#20c997',
+            backgroundColor: 'rgba(32, 201, 151, .15)',
             tension: .4,
             fill: true,
             borderWidth: 3,
@@ -502,11 +617,11 @@
             pointBorderColor: '#fff',
             pointBorderWidth: 2
           },
-          { 
-            label: 'Clientes', 
-            data: aggCli, 
-            borderColor: '#fd7e14', 
-            backgroundColor: 'rgba(253, 126, 20, .15)', 
+          {
+            label: 'Clientes',
+            data: aggCli,
+            borderColor: '#fd7e14',
+            backgroundColor: 'rgba(253, 126, 20, .15)',
             tension: .4,
             fill: true,
             borderWidth: 3,
@@ -518,8 +633,8 @@
           },
         ]
       },
-      options: { 
-        responsive: true, 
+      options: {
+        responsive: true,
         maintainAspectRatio: false,
         interaction: {
           mode: 'index',
@@ -533,7 +648,9 @@
             labels: {
               usePointStyle: true,
               padding: 15,
-              font: { size: 12 }
+              font: {
+                size: 12
+              }
             }
           },
           tooltip: {
@@ -544,16 +661,22 @@
             cornerRadius: 6
           }
         },
-        scales: { 
-          y: { 
-            beginAtZero: true, 
-            ticks: { stepSize: 1 },
-            grid: { color: 'rgba(169, 179, 193, 0.08)' }
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            },
+            grid: {
+              color: 'rgba(169, 179, 193, 0.08)'
+            }
           },
           x: {
-            grid: { display: false }
+            grid: {
+              display: false
+            }
           }
-        } 
+        }
       }
     });
 
@@ -565,23 +688,25 @@
     const ctxTopEmps = document.getElementById('topEmpsChart').getContext('2d');
     new Chart(ctxTopEmps, {
       type: 'bar',
-      data: { 
-        labels: topEmpLabels, 
-        datasets: [{ 
-          label: 'Movimientos', 
-          data: topEmpValues, 
-          backgroundColor: 'rgba(25, 135, 84, .6)', 
+      data: {
+        labels: topEmpLabels,
+        datasets: [{
+          label: 'Movimientos',
+          data: topEmpValues,
+          backgroundColor: 'rgba(25, 135, 84, .6)',
           borderColor: '#198754',
           borderWidth: 2,
           borderRadius: 6
-        }] 
+        }]
       },
-      options: { 
-        indexAxis: 'y', 
+      options: {
+        indexAxis: 'y',
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { display: false },
+          legend: {
+            display: false
+          },
           tooltip: {
             backgroundColor: 'rgba(27, 31, 37, 0.95)',
             padding: 12,
@@ -590,39 +715,47 @@
             cornerRadius: 6
           }
         },
-        scales: { 
-          x: { 
-            beginAtZero: true, 
-            ticks: { stepSize: 1 },
-            grid: { color: 'rgba(169, 179, 193, 0.08)' }
+        scales: {
+          x: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            },
+            grid: {
+              color: 'rgba(169, 179, 193, 0.08)'
+            }
           },
           y: {
-            grid: { display: false }
+            grid: {
+              display: false
+            }
           }
-        } 
+        }
       }
     });
 
     const ctxTopCli = document.getElementById('topClientesChart').getContext('2d');
     new Chart(ctxTopCli, {
       type: 'bar',
-      data: { 
-        labels: topCliLabels, 
-        datasets: [{ 
-          label: 'Movimientos', 
-          data: topCliValues, 
-          backgroundColor: 'rgba(255, 193, 7, .6)', 
+      data: {
+        labels: topCliLabels,
+        datasets: [{
+          label: 'Movimientos',
+          data: topCliValues,
+          backgroundColor: 'rgba(255, 193, 7, .6)',
           borderColor: '#ffc107',
           borderWidth: 2,
           borderRadius: 6
-        }] 
+        }]
       },
-      options: { 
-        indexAxis: 'y', 
+      options: {
+        indexAxis: 'y',
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { display: false },
+          legend: {
+            display: false
+          },
           tooltip: {
             backgroundColor: 'rgba(27, 31, 37, 0.95)',
             padding: 12,
@@ -631,18 +764,25 @@
             cornerRadius: 6
           }
         },
-        scales: { 
-          x: { 
-            beginAtZero: true, 
-            ticks: { stepSize: 1 },
-            grid: { color: 'rgba(169, 179, 193, 0.08)' }
+        scales: {
+          x: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            },
+            grid: {
+              color: 'rgba(169, 179, 193, 0.08)'
+            }
           },
           y: {
-            grid: { display: false }
+            grid: {
+              display: false
+            }
           }
-        } 
+        }
       }
     });
   </script>
 </body>
+
 </html>

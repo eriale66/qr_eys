@@ -31,6 +31,27 @@ class RegistroModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Devuelve el último movimiento del día por empleado.
+     * Cada fila: id_referencia, tipo_movimiento, fecha_hora
+     */
+    public function obtenerUltimosMovimientosEmpleadosPorFecha($fecha) {
+        $sql = "
+            SELECT r.id_referencia, r.tipo_movimiento, r.fecha_hora
+            FROM registros_acceso r
+            INNER JOIN (
+                SELECT id_referencia, MAX(fecha_hora) AS max_fh
+                FROM registros_acceso
+                WHERE tipo_usuario = 'empleado' AND DATE(fecha_hora) = ?
+                GROUP BY id_referencia
+            ) t ON t.id_referencia = r.id_referencia AND r.fecha_hora = t.max_fh
+            WHERE r.tipo_usuario = 'empleado'
+        ";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$fecha]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     // Nuevos filtros dinámicos para reportes
     public function obtenerRegistrosFiltrados($filtros = [], $limite = null) {
         $where = [];

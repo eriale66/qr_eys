@@ -23,13 +23,14 @@ class DashboardController {
         $clientes = $this->clienteModel->obtenerTodos() ?? [];
         $registros = $this->registroModel->obtenerRegistros(10) ?? [];
 
-        // Totales
+        // Totales base
         $totalEmpleados = count($empleados);
         $totalClientes = count($clientes);
         $totalRegistros = count($this->registroModel->obtenerRegistros(1000));
 
-        $totalEntradas = 0;
-        $totalSalidas = 0;
+        // Para la tabla de recientes (últimos 10 movimientos)
+        $totalEntradas = 0; // se sobre-escribirá con totales del día más abajo
+        $totalSalidas = 0;  // se sobre-escribirá con totales del día más abajo
 
         // Crear array enriquecido con nombres reales
         $registrosDetallados = [];
@@ -56,6 +57,36 @@ class DashboardController {
                 'fecha_hora' => $r['fecha_hora']
             ];
         }
+
+        // Presencia por día (último movimiento de hoy por empleado)
+        $hoy = date('Y-m-d');
+        $ultimosHoy = $this->registroModel->obtenerUltimosMovimientosEmpleadosPorFecha($hoy);
+        $presentes = 0;
+        foreach ($ultimosHoy as $u) {
+            if (($u['tipo_movimiento'] ?? '') === 'entrada') $presentes++;
+        }
+        $ausentes = max(0, $totalEmpleados - $presentes);
+        $porcentaje = $totalEmpleados > 0 ? round(($presentes / $totalEmpleados) * 100, 1) : 0;
+
+        // Presencia por día (último movimiento de hoy por empleado)
+        $hoy = date('Y-m-d');
+        $ultimosHoy = $this->registroModel->obtenerUltimosMovimientosEmpleadosPorFecha($hoy);
+        $presentes = 0;
+        foreach ($ultimosHoy as $u) {
+            if (($u['tipo_movimiento'] ?? '') === 'entrada') $presentes++;
+        }
+        $ausentes = max(0, $totalEmpleados - $presentes);
+        $porcentaje = $totalEmpleados > 0 ? round(($presentes / $totalEmpleados) * 100, 1) : 0;
+
+        // Totales de movimientos del día (para tarjetas)
+        $registrosHoy = $this->registroModel->obtenerPorFecha($hoy) ?? [];
+        $totalEntradasHoy = 0; $totalSalidasHoy = 0;
+        foreach ($registrosHoy as $r) {
+            if (($r['tipo_movimiento'] ?? '') === 'entrada') $totalEntradasHoy++;
+            elseif (($r['tipo_movimiento'] ?? '') === 'salida') $totalSalidasHoy++;
+        }
+        $totalEntradas = $totalEntradasHoy;
+        $totalSalidas  = $totalSalidasHoy;
 
         include __DIR__ . '/../views/dashboard/index.php';
     }

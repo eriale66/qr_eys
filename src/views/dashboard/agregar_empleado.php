@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agregar Empleado | Renlo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/qr_eys/public/css/dashboards.css">
     <link rel="stylesheet" href="/qr_eys/public/css/empleados.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -20,16 +21,32 @@
             <p>Control de Acceso</p>
         </div>
         <nav>
-            <a href="/qr_eys/public/dashboard" class="active"> Inicio</a>
-            <a href="/qr_eys/public/empleados"> Empleados</a>
-            <a href="/qr_eys/public/clientes"> Clientes</a>
-            <!-- <a href="/qr_eys/public/citas"> Citas</a> -->
-            <a href="/qr_eys/public/reportes"> Reportes</a>
-            <a href="/qr_eys/public/administracion"> Administración</a>
-            <a href="/qr_eys/public/configuracion"> Configuración</a>
+            <a href="/qr_eys/public/dashboard">
+                <i class="fa-solid fa-house"></i>
+                <span>Inicio</span>
+            </a>
+            <a href="/qr_eys/public/empleados" class="active">
+                <i class="fa-solid fa-user-tie"></i>
+                <span>Empleados</span>
+            </a>
+            <a href="/qr_eys/public/clientes">
+                <i class="fa-solid fa-users"></i>
+                <span>Clientes</span>
+            </a>
+            <a href="/qr_eys/public/reportes">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Reportes</span>
+            </a>
+            <a href="/qr_eys/public/administracion">
+                <i class="fa-solid fa-user-shield"></i>
+                <span>Administración</span>
+            </a>
         </nav>
         <div class="logout">
-            <a href="/qr_eys/public/logout">Cerrar sesión</a>
+            <a href="/qr_eys/public/logout">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Cerrar sesión</span>
+            </a>
         </div>
     </aside>
 

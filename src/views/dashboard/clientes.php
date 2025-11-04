@@ -5,6 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Clientes | Renlo</title>
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="../public/css/dashboards.css">
   <link rel="stylesheet" href="../public/css/empleados.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -22,15 +25,32 @@
       <p>Control de Acceso</p>
     </div>
     <nav>
-      <a href="/qr_eys/public/dashboard">Inicio</a>
-      <a href="/qr_eys/public/empleados">Empleados</a>
-      <a href="/qr_eys/public/clientes" class="active">Clientes</a>
-      <a href="/qr_eys/public/reportes">Reportes</a>
-      <a href="/qr_eys/public/administracion">Administración</a>
-      <a href="/qr_eys/public/configuracion">Configuración</a>
+      <a href="/qr_eys/public/dashboard">
+        <i class="fa-solid fa-house"></i>
+        <span>Inicio</span>
+      </a>
+      <a href="/qr_eys/public/empleados">
+        <i class="fa-solid fa-user-tie"></i>
+        <span>Empleados</span>
+      </a>
+      <a href="/qr_eys/public/clientes" class="active">
+        <i class="fa-solid fa-users"></i>
+        <span>Clientes</span>
+      </a>
+      <a href="/qr_eys/public/reportes">
+        <i class="fa-solid fa-chart-line"></i>
+        <span>Reportes</span>
+      </a>
+      <a href="/qr_eys/public/administracion">
+        <i class="fa-solid fa-user-shield"></i>
+        <span>Administración</span>
+      </a>
     </nav>
     <div class="logout">
-      <a href="/qr_eys/public/logout">Cerrar sesión</a>
+      <a href="/qr_eys/public/logout">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span>Cerrar sesión</span>
+      </a>
     </div>
   </aside>
 
@@ -43,7 +63,7 @@
       </div>
       <div class="header-stats">
         <div class="stat-badge">
-          <span class="stat-icon">👤</span>
+          <span class="stat-icon"><i class="fa-solid fa-user"></i></span>
           <div>
             <small>Total</small>
             <strong><?= count($clientes) ?></strong>
@@ -56,21 +76,21 @@
       <div class="toolbar-advanced">
         <div class="toolbar-left">
           <a href="/qr_eys/public/clientes/agregar" class="btn-action primary">
-            <span class="btn-icon">➕</span>
+            <span class="btn-icon"><i class="fa-solid fa-plus"></i></span>
             <span class="btn-text">Nuevo Cliente</span>
           </a>
           <a href="/qr_eys/public/clientes/pdf" class="btn-action pdf">
-            <span class="btn-icon">📄</span>
+            <span class="btn-icon"><i class="fa-solid fa-file-pdf"></i></span>
             <span class="btn-text">PDF</span>
           </a>
           <a href="/qr_eys/public/clientes/excel" class="btn-action excel">
-            <span class="btn-icon">📊</span>
+            <span class="btn-icon"><i class="fa-solid fa-file-excel"></i></span>
             <span class="btn-text">Excel</span>
           </a>
         </div>
         <div class="toolbar-right">
           <div class="search-box">
-            <span class="search-icon">🔍</span>
+            <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
             <input type="text" id="buscador" placeholder="Buscar cliente...">
           </div>
         </div>
@@ -103,11 +123,11 @@
                 <td>
                   <div class="contact-info">
                     <div class="contact-item">
-                      <span class="contact-icon">📧</span>
+                      <span class="contact-icon"><i class="fa-solid fa-envelope"></i></span>
                       <span><?= htmlspecialchars($c['correo']) ?></span>
                     </div>
                     <div class="contact-item">
-                      <span class="contact-icon">📱</span>
+                      <span class="contact-icon"><i class="fa-solid fa-phone"></i></span>
                       <span><?= htmlspecialchars($c['telefono']) ?></span>
                     </div>
                   </div>
@@ -122,13 +142,13 @@
                       <a href="<?= $qrPath ?>" download="<?= $c['nombre'] ?>.png" title="Descargar QR" class="qr-download">
                         <img src="<?= $qrPath ?>" alt="QR <?= htmlspecialchars($c['nombre']) ?>" class="qr-image">
                         <div class="qr-overlay">
-                          <span>⬇️ Descargar</span>
+                          <span><i class="fa-solid fa-download"></i>Descargar</span>
                         </div>
                       </a>
                     </div>
                   <?php else: ?>
                     <div class="qr-pending">
-                      <span class="pending-icon">⏳</span>
+                      <span class="pending-icon"><i class="fa-solid fa-hourglass-half"></i></span>
                       <span>Sin generar</span>
                     </div>
                   <?php endif; ?>
@@ -138,18 +158,18 @@
                     <a href="/qr_eys/public/clientes/generarQR?id=<?= $c['id_cliente'] ?>"
                       class="btn-icon-action qr"
                       title="Generar QR">
-                      🎟️
+                      <i class="fa-solid fa-qrcode"></i>
                     </a>
                     <a href="/qr_eys/public/clientes/editar?id=<?= $c['id_cliente'] ?>"
                       class="btn-icon-action edit"
                       title="Editar">
-                      ✏️
+                      <i class="fa-solid fa-pen"></i>
                     </a>
                     <a href="/qr_eys/public/clientes/eliminar?id=<?= $c['id_cliente'] ?>"
                       class="btn-icon-action delete delete-cliente"
                       title="Eliminar"
                       data-nombre="<?= htmlspecialchars($c['nombre']) ?>">
-                      🗑️
+                      <i class="fa-solid fa-trash"></i>
                     </a>
                   </div>
                 </td>
