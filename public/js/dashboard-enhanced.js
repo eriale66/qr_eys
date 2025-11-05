@@ -37,114 +37,165 @@ document.addEventListener('DOMContentLoaded', () => {
     }, index * 100);
   });
 
-  // ===== GRÁFICA DE ASISTENCIA CON CANVAS =====
+  // ===== GRÁFICA DE ASISTENCIA CON CHART.JS =====
   const canvas = document.getElementById('attendanceChart');
-  if (canvas) {
-    const ctx = canvas.getContext('2d');
-    const dpr = window.devicePixelRatio || 1;
-    
-    // Configurar tamaño del canvas
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    ctx.scale(dpr, dpr);
-    
-    // Obtener datos
-    const presentBar = document.querySelector('.bar.present');
-    const absentBar = document.querySelector('.bar.absent');
-    
-    const presentHeight = presentBar ? parseInt(presentBar.style.height) || 80 : 80;
-    const absentHeight = absentBar ? parseInt(absentBar.style.height) || 40 : 40;
-    
-    // Configuración de la gráfica
-    const barWidth = 80;
-    const gap = 60;
-    const maxHeight = rect.height - 60;
-    const startX = (rect.width - (barWidth * 2 + gap)) / 2;
-    
-    let animationProgress = 0;
-    const animationDuration = 1500;
-    const startTime = Date.now();
-    
-    // Función de animación
-    const drawChart = () => {
-      const elapsed = Date.now() - startTime;
-      animationProgress = Math.min(elapsed / animationDuration, 1);
-      
-      // Función de easing
-      const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
-      const progress = easeOutCubic(animationProgress);
-      
-      // Limpiar canvas
-      ctx.clearRect(0, 0, rect.width, rect.height);
-      
-      // Calcular alturas animadas
-      const currentPresentHeight = (presentHeight / 100) * maxHeight * progress;
-      const currentAbsentHeight = (absentHeight / 100) * maxHeight * progress;
-      
-      // Dibujar barra de Presente
-      const presentGradient = ctx.createLinearGradient(0, rect.height - currentPresentHeight, 0, rect.height);
-      presentGradient.addColorStop(0, '#4cc9f0');
-      presentGradient.addColorStop(1, '#0d6efd');
-      
-      ctx.fillStyle = presentGradient;
-      ctx.shadowColor = 'rgba(76, 201, 240, 0.5)';
-      ctx.shadowBlur = 20;
-      roundRect(ctx, startX, rect.height - 40 - currentPresentHeight, barWidth, currentPresentHeight, 10);
-      ctx.fill();
-      
-      // Dibujar barra de Ausente
-      const absentGradient = ctx.createLinearGradient(0, rect.height - currentAbsentHeight, 0, rect.height);
-      absentGradient.addColorStop(0, '#dc143c');
-      absentGradient.addColorStop(1, '#8b0000');
-      
-      ctx.fillStyle = absentGradient;
-      ctx.shadowColor = 'rgba(220, 20, 60, 0.5)';
-      ctx.shadowBlur = 20;
-      roundRect(ctx, startX + barWidth + gap, rect.height - 40 - currentAbsentHeight, barWidth, currentAbsentHeight, 10);
-      ctx.fill();
-      
-      // Resetear sombra
-      ctx.shadowBlur = 0;
-      
-      // Dibujar etiquetas
-      ctx.fillStyle = '#a9b3c1';
-      ctx.font = '14px Poppins';
-      ctx.textAlign = 'center';
-      ctx.fillText('Presente', startX + barWidth / 2, rect.height - 15);
-      ctx.fillText('Ausente', startX + barWidth + gap + barWidth / 2, rect.height - 15);
-      
-      // Continuar animación
-      if (animationProgress < 1) {
-        requestAnimationFrame(drawChart);
-      }
+  let attendanceChart = null;
+
+  // Función para obtener colores según el tema
+  const getChartColors = () => {
+    const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const isDark = theme === 'dark';
+
+    return {
+      present: {
+        gradient: isDark ? ['#4cc9f0', '#0d6efd'] : ['#06b6d4', '#0891b2'],
+        shadow: isDark ? 'rgba(76, 201, 240, 0.4)' : 'rgba(6, 182, 212, 0.3)'
+      },
+      absent: {
+        gradient: isDark ? ['#dc143c', '#8b0000'] : ['#ef4444', '#dc2626'],
+        shadow: isDark ? 'rgba(220, 20, 60, 0.4)' : 'rgba(239, 68, 68, 0.3)'
+      },
+      text: isDark ? '#a9b3c1' : '#6b7280',
+      grid: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
     };
-    
-    // Función para dibujar rectángulos redondeados
-    function roundRect(ctx, x, y, width, height, radius) {
-      ctx.beginPath();
-      ctx.moveTo(x + radius, y);
-      ctx.lineTo(x + width - radius, y);
-      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-      ctx.lineTo(x + width, y + height - radius);
-      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-      ctx.lineTo(x + radius, y + height);
-      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-      ctx.lineTo(x, y + radius);
-      ctx.quadraticCurveTo(x, y, x + radius, y);
-      ctx.closePath();
+  };
+
+  // Función para crear la gráfica
+  const createAttendanceChart = () => {
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const colors = getChartColors();
+
+    // Obtener datos del DOM
+    const presentLegend = document.querySelector('.legend-item:first-child span:last-child');
+    const absentLegend = document.querySelector('.legend-item:last-child span:last-child');
+
+    let presentValue = 0;
+    let absentValue = 0;
+
+    if (presentLegend) {
+      const match = presentLegend.textContent.match(/\((\d+)\)/);
+      presentValue = match ? parseInt(match[1]) : 0;
     }
-    
-    drawChart();
-    
-    // Redimensionar canvas al cambiar tamaño de ventana
-    window.addEventListener('resize', () => {
-      const rect = canvas.getBoundingClientRect();
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
-      ctx.scale(dpr, dpr);
-      animationProgress = 1;
-      drawChart();
+
+    if (absentLegend) {
+      const match = absentLegend.textContent.match(/\((\d+)\)/);
+      absentValue = match ? parseInt(match[1]) : 0;
+    }
+
+    // Crear gradientes
+    const presentGradient = ctx.createLinearGradient(0, 0, 0, 250);
+    presentGradient.addColorStop(0, colors.present.gradient[0]);
+    presentGradient.addColorStop(1, colors.present.gradient[1]);
+
+    const absentGradient = ctx.createLinearGradient(0, 0, 0, 250);
+    absentGradient.addColorStop(0, colors.absent.gradient[0]);
+    absentGradient.addColorStop(1, colors.absent.gradient[1]);
+
+    // Destruir gráfica anterior si existe
+    if (attendanceChart) {
+      attendanceChart.destroy();
+    }
+
+    // Crear nueva gráfica
+    attendanceChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Presente', 'Ausente'],
+        datasets: [{
+          label: 'Personal',
+          data: [presentValue, absentValue],
+          backgroundColor: [presentGradient, absentGradient],
+          borderColor: [colors.present.gradient[0], colors.absent.gradient[0]],
+          borderWidth: 2,
+          borderRadius: 12,
+          borderSkipped: false,
+          barThickness: 80,
+          shadowOffsetX: 0,
+          shadowOffsetY: 4,
+          shadowBlur: 20,
+          shadowColor: [colors.present.shadow, colors.absent.shadow]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: {
+          duration: 1500,
+          easing: 'easeOutCubic'
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            padding: 12,
+            borderColor: colors.present.gradient[0],
+            borderWidth: 1,
+            displayColors: false,
+            callbacks: {
+              label: function(context) {
+                return context.parsed.y + ' empleado' + (context.parsed.y !== 1 ? 's' : '');
+              }
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              color: colors.text,
+              font: {
+                family: 'Poppins',
+                size: 12
+              },
+              stepSize: 1
+            },
+            grid: {
+              color: colors.grid,
+              drawBorder: false
+            }
+          },
+          x: {
+            ticks: {
+              color: colors.text,
+              font: {
+                family: 'Poppins',
+                size: 13,
+                weight: '500'
+              }
+            },
+            grid: {
+              display: false
+            }
+          }
+        },
+        layout: {
+          padding: {
+            top: 10,
+            bottom: 5
+          }
+        }
+      }
+    });
+  };
+
+  // Crear la gráfica al cargar
+  if (canvas) {
+    setTimeout(createAttendanceChart, 500);
+  }
+
+  // Escuchar cambios de tema para actualizar la gráfica
+  const themeToggleBtn = document.getElementById('themeToggle');
+  if (themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', () => {
+      setTimeout(() => {
+        createAttendanceChart();
+      }, 100);
     });
   }
 
