@@ -1,5 +1,32 @@
 /* ===== REPORTES STYLES ===== */
 
+/* Soporte para modo claro */
+[data-theme="light"] .filters-advanced,
+[data-theme="light"] .stat-card,
+[data-theme="light"] .chart-container,
+[data-theme="light"] .table-container {
+  background: var(--bg-card);
+  border-color: var(--border-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .page-header {
+  border-bottom-color: var(--border-color);
+}
+
+[data-theme="light"] .data-table tbody tr {
+  border-bottom-color: var(--border-color);
+}
+
+[data-theme="light"] .data-table tbody tr:hover {
+  background: var(--hover-bg);
+}
+
+[data-theme="light"] .chart-header,
+[data-theme="light"] .table-header {
+  border-bottom-color: var(--border-color);
+}
+
 .page-header {
   display: flex;
   justify-content: space-between;

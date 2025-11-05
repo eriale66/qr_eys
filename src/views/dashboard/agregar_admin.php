@@ -5,9 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agregar Administrador | Renlo</title>
+    <script>
+        // Cargar tema inmediatamente para evitar flash
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/qr_eys/public/css/dashboards.css">
     <link rel="stylesheet" href="/qr_eys/public/css/empleados.css">
+    <script src="../public/js/dashboards.js" defer></script>
 </head>
 
 <body>
@@ -40,6 +48,12 @@
                 <span>Administración</span>
             </a>
         </nav>
+        <div class="theme-toggle">
+            <button class="theme-toggle-btn" id="themeToggle">
+                <span id="themeText">Modo Claro</span>
+                <i class="fa-solid fa-sun" id="themeIcon"></i>
+            </button>
+        </div>
         <div class="logout">
             <a href="/qr_eys/public/logout">
                 <i class="fa-solid fa-right-from-bracket"></i>

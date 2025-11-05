@@ -5,6 +5,22 @@
   --accent: #4cc9f0;
   --text: #f1f3f6;
   --text-muted: #a9b3c1;
+  --border-color: rgba(76, 201, 240, 0.1);
+  --hover-bg: rgba(76, 201, 240, 0.1);
+  --table-stripe: rgba(255, 255, 255, 0.05);
+}
+
+/* Modo Claro */
+[data-theme="light"] {
+  --bg-dark: #f5f7fa;
+  --bg-card: #ffffff;
+  --primary: #0d6efd;
+  --accent: #0891b2;
+  --text: #1f2937;
+  --text-muted: #6b7280;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --hover-bg: rgba(8, 145, 178, 0.1);
+  --table-stripe: rgba(0, 0, 0, 0.03);
 }
 
 * {
@@ -14,11 +30,31 @@
   font-family: "Poppins", sans-serif;
 }
 
+/* Transiciones suaves para el cambio de tema */
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 body {
   display: flex;
   min-height: 100vh;
   background: var(--bg-dark);
   color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Transiciones para elementos que cambian de color */
+.sidebar,
+.card,
+.stats,
+.records,
+.progress-section,
+nav a,
+.btn-action,
+input,
+select,
+textarea {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 /* ===== SIDEBAR ===== */
@@ -32,7 +68,8 @@ body {
   position: fixed;
   top: 0;
   bottom: 0;
-  border-right: 1px solid rgba(76, 201, 240, 0.1);
+  border-right: 1px solid var(--border-color);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .brand {
@@ -79,7 +116,7 @@ nav a i {
 }
 
 nav a:hover {
-  background: rgba(76, 201, 240, 0.1);
+  background: var(--hover-bg);
   color: var(--accent);
   transform: translateX(3px);
 }
@@ -116,6 +153,44 @@ nav a.active {
 .logout a i {
   width: 18px;
   text-align: center;
+}
+
+/* ===== THEME TOGGLE ===== */
+.theme-toggle {
+  margin-bottom: 15px;
+  padding: 0 10px;
+}
+
+.theme-toggle-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 15px;
+  background: var(--hover-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+}
+
+.theme-toggle-btn i {
+  font-size: 1.1rem;
+  transition: transform 0.3s ease;
+}
+
+.theme-toggle-btn:hover i {
+  transform: rotate(180deg);
 }
 
 /* ===== MAIN CONTENT ===== */
@@ -217,7 +292,7 @@ thead {
   background: var(--primary);
 }
 tbody tr:nth-child(odd) {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--table-stripe);
 }
 .status {
   font-weight: bold;
