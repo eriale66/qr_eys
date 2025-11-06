@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../models/empleadoModel.php';
 require_once __DIR__ . '/../utils/CSRF.php';
+require_once __DIR__ . '/../utils/FileHelper.php';
+require_once __DIR__ . '/../utils/Validator.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 use Endroid\QrCode\Builder\Builder;
@@ -43,8 +45,12 @@ class EmpleadoController
         );
 
         $path = __DIR__ . "/../../public/qr_empleados/";
-        if (!file_exists($path)) mkdir($path, 0777, true);
-        $filePath = $path . $empleado['nombre'] . ".png";
+        if (!file_exists($path)) mkdir($path, 0755, true);
+
+        // Sanitizar nombre de archivo para prevenir path traversal
+        $safeFilename = FileHelper::sanitizeFilename($empleado['nombre'], 'png');
+        $filePath = $path . $safeFilename;
+
         $result->saveToFile($filePath);
 
         header("Location: /qr_eys/public/empleados?type=success&msg=" . urlencode("QR generado correctamente para {$empleado['nombre']}"));
@@ -57,11 +63,11 @@ class EmpleadoController
         $html = '<h2>Lista de Empleados</h2><table border="1" cellpadding="8"><tr><th>ID</th><th>Nombre</th><th>Puesto</th><th>Correo</th><th>Teléfono</th></tr>';
         foreach ($empleados as $e) {
             $html .= "<tr>
-                <td>{$e['id_empleado']}</td>
-                <td>{$e['nombre']}</td>
-                <td>{$e['puesto']}</td>
-                <td>{$e['correo']}</td>
-                <td>{$e['telefono']}</td>
+                <td>" . htmlspecialchars($e['id_empleado'], ENT_QUOTES, 'UTF-8') . "</td>
+                <td>" . htmlspecialchars($e['nombre'], ENT_QUOTES, 'UTF-8') . "</td>
+                <td>" . htmlspecialchars($e['puesto'], ENT_QUOTES, 'UTF-8') . "</td>
+                <td>" . htmlspecialchars($e['correo'], ENT_QUOTES, 'UTF-8') . "</td>
+                <td>" . htmlspecialchars($e['telefono'], ENT_QUOTES, 'UTF-8') . "</td>
             </tr>";
         }
         $html .= '</table>';
@@ -118,8 +124,21 @@ class EmpleadoController
             $correo = $_POST['correo'] ?? '';
             $telefono = $_POST['telefono'] ?? '';
 
+            // Validar campos
             if (empty($nombre) || empty($puesto) || empty($correo) || empty($telefono)) {
                 header("Location: /qr_eys/public/empleados/agregar?type=error&msg=" . urlencode('Todos los campos son obligatorios'));
+                exit;
+            }
+
+            // Validar email
+            if (!Validator::validateEmail($correo)) {
+                header("Location: /qr_eys/public/empleados/agregar?type=error&msg=" . urlencode('El email no es válido'));
+                exit;
+            }
+
+            // Validar teléfono
+            if (!Validator::validatePhone($telefono)) {
+                header("Location: /qr_eys/public/empleados/agregar?type=error&msg=" . urlencode('El teléfono no es válido'));
                 exit;
             }
 
@@ -158,6 +177,18 @@ class EmpleadoController
                 exit;
             }
 
+            // Validar email
+            if (!Validator::validateEmail($correo)) {
+                header("Location: /qr_eys/public/empleados?type=error&msg=" . urlencode('El email no es válido'));
+                exit;
+            }
+
+            // Validar teléfono
+            if (!Validator::validatePhone($telefono)) {
+                header("Location: /qr_eys/public/empleados?type=error&msg=" . urlencode('El teléfono no es válido'));
+                exit;
+            }
+
             // Obtener datos actuales del empleado
             $empleadoActual = $this->empleadoModel->obtenerPorId($id);
             if (!$empleadoActual) {
@@ -167,15 +198,19 @@ class EmpleadoController
 
             // Guardar el nombre actual del archivo QR
             $qrDir = __DIR__ . "/../../public/qr_empleados/";
-            $oldName = $empleadoActual['nombre'];
-            $oldQRPath = $qrDir . $oldName . ".png";
-            $newQRPath = $qrDir . $nombre . ".png";
+
+            // Sanitizar nombres de archivos
+            $oldSafeFilename = FileHelper::sanitizeFilename($empleadoActual['nombre'], 'png');
+            $newSafeFilename = FileHelper::sanitizeFilename($nombre, 'png');
+
+            $oldQRPath = $qrDir . $oldSafeFilename;
+            $newQRPath = $qrDir . $newSafeFilename;
 
             // Actualizar en la base de datos
             $this->empleadoModel->actualizarEmpleado($id, $nombre, $puesto, $correo, $telefono);
 
             // Si el archivo QR existe y el nombre cambió, renombrarlo
-            if ($oldName !== $nombre && file_exists($oldQRPath)) {
+            if ($oldSafeFilename !== $newSafeFilename && file_exists($oldQRPath)) {
                 rename($oldQRPath, $newQRPath);
             }
 
@@ -199,8 +234,9 @@ class EmpleadoController
             exit;
         }
 
-        // Ruta del archivo QR correspondiente
-        $qrPath = __DIR__ . "/../../public/qr_empleados/" . $empleado['nombre'] . ".png";
+        // Ruta del archivo QR correspondiente (sanitizada)
+        $safeFilename = FileHelper::sanitizeFilename($empleado['nombre'], 'png');
+        $qrPath = __DIR__ . "/../../public/qr_empleados/" . $safeFilename;
 
         // Eliminar empleado de la base de datos
         if ($this->empleadoModel->eliminarEmpleado($id)) {

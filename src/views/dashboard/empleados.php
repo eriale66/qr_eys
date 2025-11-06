@@ -157,8 +157,8 @@ require_once __DIR__ . '/../../utils/CSRF.php';
 
                   if (file_exists($filePath)): ?>
                     <div class="qr-container">
-                      <a href="<?= $qrPath ?>" download="<?= $e['nombre'] ?>.png" title="Descargar QR" class="qr-download">
-                        <img src="<?= $qrPath ?>" alt="QR <?= htmlspecialchars($e['nombre']) ?>" class="qr-image">
+                      <a href="<?= htmlspecialchars($qrPath, ENT_QUOTES, 'UTF-8') ?>" download="<?= htmlspecialchars($e['nombre'], ENT_QUOTES, 'UTF-8') ?>.png" title="Descargar QR" class="qr-download">
+                        <img src="<?= htmlspecialchars($qrPath, ENT_QUOTES, 'UTF-8') ?>" alt="QR <?= htmlspecialchars($e['nombre']) ?>" class="qr-image">
                         <div class="qr-overlay">
                           <span><i class="fa-solid fa-download"></i>Descargar</span>
                         </div>

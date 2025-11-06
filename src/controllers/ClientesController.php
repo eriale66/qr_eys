@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../models/ClienteModel.php';
 require_once __DIR__ . '/../utils/CSRF.php';
+require_once __DIR__ . '/../utils/FileHelper.php';
+require_once __DIR__ . '/../utils/Validator.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 use Endroid\QrCode\Builder\Builder;
@@ -37,6 +39,18 @@ class ClienteController {
 
             if (empty($nombre) || empty($correo) || empty($telefono)) {
                 header("Location: /qr_eys/public/clientes?type=error&msg=" . urlencode('Todos los campos son obligatorios'));
+                exit;
+            }
+
+            // Validar email
+            if (!Validator::validateEmail($correo)) {
+                header("Location: /qr_eys/public/clientes/agregar?type=error&msg=" . urlencode('El email no es válido'));
+                exit;
+            }
+
+            // Validar teléfono
+            if (!Validator::validatePhone($telefono)) {
+                header("Location: /qr_eys/public/clientes/agregar?type=error&msg=" . urlencode('El teléfono no es válido'));
                 exit;
             }
 
@@ -85,8 +99,12 @@ class ClienteController {
         );
 
         $path = __DIR__ . "/../../public/qr_clientes/";
-        if (!file_exists($path)) mkdir($path, 0777, true);
-        $filePath = $path . $cliente['nombre'] . ".png";
+        if (!file_exists($path)) mkdir($path, 0755, true);
+
+        // Sanitizar nombre de archivo para prevenir path traversal
+        $safeFilename = FileHelper::sanitizeFilename($cliente['nombre'], 'png');
+        $filePath = $path . $safeFilename;
+
         $result->saveToFile($filePath);
 
         header("Location: /qr_eys/public/clientes?type=success&msg=" . urlencode("QR generado correctamente para {$cliente['nombre']}"));
@@ -113,6 +131,18 @@ class ClienteController {
                 exit;
             }
 
+            // Validar email
+            if (!Validator::validateEmail($correo)) {
+                header("Location: /qr_eys/public/clientes?type=error&msg=" . urlencode('El email no es válido'));
+                exit;
+            }
+
+            // Validar teléfono
+            if (!Validator::validatePhone($telefono)) {
+                header("Location: /qr_eys/public/clientes?type=error&msg=" . urlencode('El teléfono no es válido'));
+                exit;
+            }
+
             $clienteActual = $this->clienteModel->obtenerPorId($id);
             if (!$clienteActual) {
                 header("Location: /qr_eys/public/clientes?type=error&msg=" . urlencode('Cliente no encontrado'));
@@ -120,13 +150,17 @@ class ClienteController {
             }
 
             $qrDir = __DIR__ . "/../../public/qr_clientes/";
-            $oldName = $clienteActual['nombre'];
-            $oldQRPath = $qrDir . $oldName . ".png";
-            $newQRPath = $qrDir . $nombre . ".png";
+
+            // Sanitizar nombres de archivos
+            $oldSafeFilename = FileHelper::sanitizeFilename($clienteActual['nombre'], 'png');
+            $newSafeFilename = FileHelper::sanitizeFilename($nombre, 'png');
+
+            $oldQRPath = $qrDir . $oldSafeFilename;
+            $newQRPath = $qrDir . $newSafeFilename;
 
             $this->clienteModel->actualizarCliente($id, $nombre, $correo, $telefono);
 
-            if ($oldName !== $nombre && file_exists($oldQRPath)) {
+            if ($oldSafeFilename !== $newSafeFilename && file_exists($oldQRPath)) {
                 rename($oldQRPath, $newQRPath);
             }
 
@@ -149,7 +183,9 @@ class ClienteController {
             exit;
         }
 
-        $qrPath = __DIR__ . "/../../public/qr_clientes/" . $cliente['nombre'] . ".png";
+        // Sanitizar nombre de archivo
+        $safeFilename = FileHelper::sanitizeFilename($cliente['nombre'], 'png');
+        $qrPath = __DIR__ . "/../../public/qr_clientes/" . $safeFilename;
 
         if ($this->clienteModel->eliminarCliente($id)) {
             if (file_exists($qrPath)) unlink($qrPath);
@@ -166,10 +202,10 @@ class ClienteController {
         $html = '<h2>Lista de Clientes</h2><table border="1" cellpadding="8"><tr><th>ID</th><th>Nombre</th><th>Correo</th><th>Teléfono</th></tr>';
         foreach ($clientes as $c) {
             $html .= "<tr>
-                <td>{$c['id_cliente']}</td>
-                <td>{$c['nombre']}</td>
-                <td>{$c['correo']}</td>
-                <td>{$c['telefono']}</td>
+                <td>" . htmlspecialchars($c['id_cliente'], ENT_QUOTES, 'UTF-8') . "</td>
+                <td>" . htmlspecialchars($c['nombre'], ENT_QUOTES, 'UTF-8') . "</td>
+                <td>" . htmlspecialchars($c['correo'], ENT_QUOTES, 'UTF-8') . "</td>
+                <td>" . htmlspecialchars($c['telefono'], ENT_QUOTES, 'UTF-8') . "</td>
             </tr>";
         }
         $html .= '</table>';
