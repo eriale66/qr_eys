@@ -1,3 +1,6 @@
+<?php
+require_once __DIR__ . '/../../utils/CSRF.php';
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -36,6 +39,7 @@ input[type="text"] {
 <body>
     <h2>Escanee su código QR</h2>
     <form method="POST" action="/qr_eys/public/registrar-acceso">
+        <?= CSRF::inputField() ?>
         <input type="text" name="codigo" autofocus autocomplete="off" placeholder="Coloque el cursor aquí y escanee">
     </form>
 </body>

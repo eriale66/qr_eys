@@ -1,3 +1,6 @@
+<?php
+require_once __DIR__ . '/../../utils/CSRF.php';
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -145,9 +148,13 @@
                                         <a href="/qr_eys/public/administracion/editar?id=<?= $u['id_usuario'] ?>" class="btn-icon-action edit" title="Editar">
                                             <i class="fa-solid fa-pen"></i>
                                         </a>
-                                        <a href="/qr_eys/public/administracion/eliminar?id=<?= $u['id_usuario'] ?>" class="btn-icon-action delete delete-admin" title="Eliminar" data-nombre="<?= htmlspecialchars($u['usuario']) ?>">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </a>
+                                        <form method="POST" action="/qr_eys/public/administracion/eliminar" style="display: inline;" class="form-eliminar-admin" data-nombre="<?= htmlspecialchars($u['usuario'], ENT_QUOTES) ?>">
+                                            <?= CSRF::inputField() ?>
+                                            <input type="hidden" name="id" value="<?= $u['id_usuario'] ?>">
+                                            <button type="button" class="btn-icon-action delete btn-eliminar" title="Eliminar">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
@@ -159,14 +166,17 @@
     </main>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.delete-admin').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const nombre = this.getAttribute('data-nombre') || 'este administrador';
-                    confirmarEliminacion(nombre).then(c => {
-                        if (c) window.location.href = this.href;
-                    });
+        // Manejar eliminación con SweetAlert2
+        document.querySelectorAll('.form-eliminar-admin .btn-eliminar').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const form = this.closest('form');
+                const nombre = form.dataset.nombre;
+
+                confirmarEliminacion(nombre).then(confirmed => {
+                    if (confirmed) {
+                        form.submit();
+                    }
                 });
             });
         });

@@ -1,3 +1,6 @@
+<?php
+require_once __DIR__ . '/../../utils/CSRF.php';
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -69,6 +72,7 @@
 
         <div class="form-container">
             <form action="/qr_eys/public/clientes/actualizar" method="POST" class="form-card">
+                <?= CSRF::inputField() ?>
                 <input type="hidden" name="id_cliente" value="<?= $cliente['id_cliente'] ?>">
 
                 <label>Nombre completo</label>

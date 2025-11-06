@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿<?php
+require_once __DIR__ . '/../../utils/CSRF.php';
+?>
+<!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -176,9 +179,13 @@
                     <a href="/qr_eys/public/empleados/editar?id=<?= $e['id_empleado'] ?>" class="btn-icon-action edit" title="Editar">
                       <i class="fa-solid fa-pen"></i>
                     </a>
-                    <a href="/qr_eys/public/empleados/eliminar?id=<?= $e['id_empleado'] ?>" onclick="event.preventDefault(); confirmarEliminacion('<?= htmlspecialchars($e['nombre']) ?>').then(c=>{ if(c) window.location.href=this.href; });" class="btn-icon-action delete" title="Eliminar">
-                      <i class="fa-solid fa-trash"></i>
-                    </a>
+                    <form method="POST" action="/qr_eys/public/empleados/eliminar" style="display: inline;" class="form-eliminar-empleado" data-nombre="<?= htmlspecialchars($e['nombre'], ENT_QUOTES) ?>">
+                      <?= CSRF::inputField() ?>
+                      <input type="hidden" name="id" value="<?= $e['id_empleado'] ?>">
+                      <button type="button" class="btn-icon-action delete btn-eliminar" title="Eliminar">
+                        <i class="fa-solid fa-trash"></i>
+                      </button>
+                    </form>
                   </div>
                 </td>
               </tr>
@@ -188,6 +195,23 @@
       </div>
       </div>
   </main>
+
+  <script>
+    // Manejar eliminación con SweetAlert2
+    document.querySelectorAll('.form-eliminar-empleado .btn-eliminar').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const form = this.closest('form');
+        const nombre = form.dataset.nombre;
+
+        confirmarEliminacion(nombre).then(confirmed => {
+          if (confirmed) {
+            form.submit();
+          }
+        });
+      });
+    });
+  </script>
 
 </body>
 

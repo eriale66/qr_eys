@@ -1,3 +1,6 @@
+<?php
+require_once __DIR__ . '/../../utils/CSRF.php';
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -174,9 +177,13 @@
                     <a href="/qr_eys/public/clientes/editar?id=<?= $c['id_cliente'] ?>" class="btn-icon-action edit" title="Editar">
                       <i class="fa-solid fa-pen"></i>
                     </a>
-                    <a href="/qr_eys/public/clientes/eliminar?id=<?= $c['id_cliente'] ?>" class="btn-icon-action delete delete-cliente" title="Eliminar" data-nombre="<?= htmlspecialchars($c['nombre']) ?>">
-                      <i class="fa-solid fa-trash"></i>
-                    </a>
+                    <form method="POST" action="/qr_eys/public/clientes/eliminar" style="display: inline;" class="form-eliminar-cliente" data-nombre="<?= htmlspecialchars($c['nombre'], ENT_QUOTES) ?>">
+                      <?= CSRF::inputField() ?>
+                      <input type="hidden" name="id" value="<?= $c['id_cliente'] ?>">
+                      <button type="button" class="btn-icon-action delete btn-eliminar" title="Eliminar">
+                        <i class="fa-solid fa-trash"></i>
+                      </button>
+                    </form>
                   </div>
                 </td>
               </tr>
@@ -188,14 +195,17 @@
   </main>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.delete-cliente').forEach(link => {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          const nombre = this.getAttribute('data-nombre') || 'este cliente';
-          confirmarEliminacion(nombre).then(c => {
-            if (c) window.location.href = this.href;
-          });
+    // Manejar eliminación con SweetAlert2
+    document.querySelectorAll('.form-eliminar-cliente .btn-eliminar').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const form = this.closest('form');
+        const nombre = form.dataset.nombre;
+
+        confirmarEliminacion(nombre).then(confirmed => {
+          if (confirmed) {
+            form.submit();
+          }
         });
       });
     });

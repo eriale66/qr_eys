@@ -1,3 +1,6 @@
+<?php
+require_once __DIR__ . '/../../utils/CSRF.php';
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -71,6 +74,8 @@
 
         <div class="form-container">
             <form action="/qr_eys/public/empleados/guardar" method="POST" class="form-card">
+                <?= CSRF::inputField() ?>
+
                 <label>Nombre completo</label>
                 <input type="text" name="nombre" required>
 

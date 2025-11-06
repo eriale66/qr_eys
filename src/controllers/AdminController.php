@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../models/AdminModel.php';
+require_once __DIR__ . '/../utils/CSRF.php';
 
 class AdminController {
     private $adminModel;
@@ -19,6 +20,9 @@ class AdminController {
 
     public function guardarAdmin() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Validar token CSRF
+            CSRF::validateOrDie();
+
             $nombre = $_POST['nombre'] ?? '';
             $usuario = $_POST['usuario'] ?? '';
             $contraseña = $_POST['contraseña'] ?? '';
@@ -46,6 +50,9 @@ class AdminController {
 
     public function actualizarAdmin() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Validar token CSRF
+            CSRF::validateOrDie();
+
             $id = $_POST['id_usuario'] ?? '';
             $nombre = $_POST['nombre'] ?? '';
             $usuario = $_POST['usuario'] ?? '';
@@ -62,7 +69,13 @@ class AdminController {
         }
     }
 
-    public function eliminarAdmin($id) {
+    public function eliminarAdmin($id = null) {
+        // Si viene de POST, validar CSRF y obtener ID
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            CSRF::validateOrDie();
+            $id = $_POST['id'] ?? null;
+        }
+
         if ($this->adminModel->eliminarAdmin($id)) {
             header("Location: /qr_eys/public/administracion?type=success&msg=" . urlencode('Administrador eliminado correctamente'));
             exit;

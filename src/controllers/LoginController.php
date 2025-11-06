@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../models/UsuarioModel.php';
+require_once __DIR__ . '/../utils/CSRF.php';
 session_start();
 
 class LoginController
@@ -18,6 +19,9 @@ class LoginController
 
     public function autenticar()
     {
+        // Validar token CSRF
+        CSRF::validateOrDie();
+
         $usuario = $_POST['usuario'] ?? '';
         $contraseña = $_POST['contraseña'] ?? '';
 

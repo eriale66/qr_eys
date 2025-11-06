@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../models/empleadoModel.php';
+require_once __DIR__ . '/../utils/CSRF.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 use Endroid\QrCode\Builder\Builder;
@@ -109,6 +110,9 @@ class EmpleadoController
     public function guardarEmpleado()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Validar token CSRF
+            CSRF::validateOrDie();
+
             $nombre = $_POST['nombre'] ?? '';
             $puesto = $_POST['puesto'] ?? '';
             $correo = $_POST['correo'] ?? '';
@@ -140,6 +144,9 @@ class EmpleadoController
     public function actualizarEmpleado()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Validar token CSRF
+            CSRF::validateOrDie();
+
             $id = $_POST['id_empleado'] ?? '';
             $nombre = trim($_POST['nombre'] ?? '');
             $puesto = trim($_POST['puesto'] ?? '');
@@ -177,8 +184,14 @@ class EmpleadoController
         }
     }
 
-    public function eliminarEmpleado($id)
+    public function eliminarEmpleado($id = null)
     {
+        // Si viene de POST, validar CSRF y obtener ID
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            CSRF::validateOrDie();
+            $id = $_POST['id'] ?? null;
+        }
+
         $empleado = $this->empleadoModel->obtenerPorId($id);
 
         if (!$empleado) {

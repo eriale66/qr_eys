@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../models/empleadoModel.php';
 require_once __DIR__ . '/../models/clienteModel.php';
 require_once __DIR__ . '/../models/registroModel.php';
+require_once __DIR__ . '/../utils/CSRF.php';
 require_once __DIR__ . '/../../config/database.php';
 
 class RegistroController {
@@ -20,6 +21,9 @@ class RegistroController {
     }
 
     public function registrarAcceso() {
+        // Validar token CSRF
+        CSRF::validateOrDie();
+
         // Validar código recibido
         if (empty($_POST['codigo'])) {
             $mensaje = "No se detectó ningún código.";

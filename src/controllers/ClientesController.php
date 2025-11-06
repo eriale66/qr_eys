@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../models/ClienteModel.php';
+require_once __DIR__ . '/../utils/CSRF.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 use Endroid\QrCode\Builder\Builder;
@@ -27,6 +28,9 @@ class ClienteController {
 
     public function guardarCliente() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Validar token CSRF
+            CSRF::validateOrDie();
+
             $nombre = $_POST['nombre'] ?? '';
             $correo = $_POST['correo'] ?? '';
             $telefono = $_POST['telefono'] ?? '';
@@ -96,6 +100,9 @@ class ClienteController {
 
     public function actualizarCliente() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Validar token CSRF
+            CSRF::validateOrDie();
+
             $id = $_POST['id_cliente'] ?? '';
             $nombre = $_POST['nombre'] ?? '';
             $correo = $_POST['correo'] ?? '';
@@ -128,7 +135,13 @@ class ClienteController {
         }
     }
 
-    public function eliminarCliente($id) {
+    public function eliminarCliente($id = null) {
+        // Si viene de POST, validar CSRF y obtener ID
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            CSRF::validateOrDie();
+            $id = $_POST['id'] ?? null;
+        }
+
         $cliente = $this->clienteModel->obtenerPorId($id);
 
         if (!$cliente) {

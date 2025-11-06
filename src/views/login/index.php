@@ -1,3 +1,6 @@
+<?php
+require_once __DIR__ . '/../../utils/CSRF.php';
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -21,6 +24,8 @@
   <?php endif; ?>
 
   <form method="POST" action="/qr_eys/public/autenticar">
+    <?= CSRF::inputField() ?>
+
     <label>Usuario</label>
     <input type="text" name="usuario" required>
 
