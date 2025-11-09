@@ -1,70 +1,470 @@
-body {
-  background: #0d1117;
-  font-family: 'Poppins', sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  color: #f0f6fc;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.login-container {
-  background: #161b22;
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ========== ESTRUCTURA PRINCIPAL ========== */
+.login-wrapper {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+
+/* ========== COLUMNA IZQUIERDA (FORMULARIO) ========== */
+.login-left {
+  flex: 0 0 40%;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 40px;
-  border-radius: 10px;
-  width: 350px;
+}
+
+.login-form-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+.logo-container {
   text-align: center;
-  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+  margin-bottom: 30px;
+}
+
+.logo {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
 }
 
 h2 {
-  color: #4cc9f0;
-  margin-bottom: 5px;
+  color: #1a1a2e;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-align: center;
 }
 
-p {
-  color: #8b949e;
-  margin-bottom: 25px;
+.subtitle {
+  color: #6c757d;
+  font-size: 14px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* ========== FORMULARIO ========== */
+.form-group {
+  margin-bottom: 20px;
 }
 
 label {
   display: block;
-  text-align: left;
-  margin-bottom: 5px;
-  color: #8b949e;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: 500;
+  font-size: 14px;
 }
 
-input {
+input[type="text"],
+input[type="password"] {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border: none;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
   border-radius: 6px;
-  background: #0d1117;
-  color: #f0f6fc;
-  font-size: 16px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background: #ffffff;
+  color: #333;
 }
 
-button {
+input[type="text"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+input::placeholder {
+  color: #aaa;
+}
+
+.btn-login {
   width: 100%;
-  background: #4cc9f0;
-  color: #fff;
-  border: none;
-  padding: 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-button:hover {
-  background: #3aaed1;
-}
-
-.error {
-  background: #ff4444;
+  padding: 14px;
+  background: #d84315;
   color: white;
-  padding: 10px;
+  border: none;
   border-radius: 6px;
-  margin-bottom: 15px;
-  font-size: 0.9rem;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.btn-login:hover {
+  background: #bf360c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(216, 67, 21, 0.3);
+}
+
+.btn-login:active {
+  transform: translateY(0);
+}
+
+/* ========== MENSAJES DE ERROR ========== */
+.error {
+  background: #ffebee;
+  color: #c62828;
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  border-left: 4px solid #c62828;
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+.login-footer {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.login-footer p {
+  color: #999;
+  font-size: 12px;
+}
+
+/* ========== COLUMNA DERECHA (ILUSTRACIÓN) ========== */
+.login-right {
+  flex: 0 0 60%;
+  background: linear-gradient(180deg, #1a1a2e 0%, #0f3460 50%, #533483 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.illustration-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* ========== ESTRELLAS ========== */
+.stars,
+.stars2,
+.stars3 {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.stars {
+  background: transparent;
+  box-shadow:
+    10% 10% 2px 1px white,
+    20% 20% 2px 1px white,
+    30% 15% 2px 1px white,
+    40% 30% 2px 1px white,
+    50% 25% 2px 1px white,
+    60% 35% 2px 1px white,
+    70% 20% 2px 1px white,
+    80% 40% 2px 1px white,
+    90% 15% 2px 1px white,
+    15% 45% 2px 1px white,
+    25% 50% 2px 1px white,
+    35% 55% 2px 1px white,
+    45% 60% 2px 1px white,
+    55% 65% 2px 1px white,
+    65% 70% 2px 1px white,
+    75% 75% 2px 1px white,
+    85% 80% 2px 1px white,
+    95% 85% 2px 1px white;
+  animation: twinkling 3s infinite;
+}
+
+.stars2 {
+  background: transparent;
+  box-shadow:
+    15% 12% 1px 0.5px rgba(255,255,255,0.7),
+    25% 22% 1px 0.5px rgba(255,255,255,0.7),
+    35% 32% 1px 0.5px rgba(255,255,255,0.7),
+    45% 42% 1px 0.5px rgba(255,255,255,0.7),
+    55% 52% 1px 0.5px rgba(255,255,255,0.7),
+    65% 62% 1px 0.5px rgba(255,255,255,0.7),
+    75% 72% 1px 0.5px rgba(255,255,255,0.7);
+  animation: twinkling 4s infinite;
+}
+
+.stars3 {
+  background: transparent;
+  box-shadow:
+    18% 18% 1px 0.3px rgba(255,255,255,0.5),
+    28% 28% 1px 0.3px rgba(255,255,255,0.5),
+    38% 38% 1px 0.3px rgba(255,255,255,0.5),
+    48% 48% 1px 0.3px rgba(255,255,255,0.5),
+    58% 58% 1px 0.3px rgba(255,255,255,0.5);
+  animation: twinkling 5s infinite;
+}
+
+@keyframes twinkling {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ========== NUBES ========== */
+.clouds {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.cloud {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 100px;
+}
+
+.cloud::before,
+.cloud::after {
+  content: '';
+  position: absolute;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 100px;
+}
+
+.cloud1 {
+  width: 80px;
+  height: 30px;
+  top: 15%;
+  left: 20%;
+  animation: float-cloud 20s infinite;
+}
+
+.cloud1::before {
+  width: 50px;
+  height: 40px;
+  top: -20px;
+  left: 10px;
+}
+
+.cloud1::after {
+  width: 60px;
+  height: 35px;
+  top: -15px;
+  left: 30px;
+}
+
+.cloud2 {
+  width: 100px;
+  height: 35px;
+  top: 25%;
+  left: 60%;
+  animation: float-cloud 25s infinite;
+}
+
+.cloud2::before {
+  width: 60px;
+  height: 45px;
+  top: -25px;
+  left: 15px;
+}
+
+.cloud2::after {
+  width: 70px;
+  height: 40px;
+  top: -20px;
+  left: 40px;
+}
+
+.cloud3 {
+  width: 70px;
+  height: 28px;
+  top: 35%;
+  left: 10%;
+  animation: float-cloud 18s infinite;
+}
+
+.cloud3::before {
+  width: 45px;
+  height: 35px;
+  top: -18px;
+  left: 8px;
+}
+
+.cloud3::after {
+  width: 50px;
+  height: 30px;
+  top: -15px;
+  left: 25px;
+}
+
+@keyframes float-cloud {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(30px); }
+}
+
+/* ========== MONTAÑAS ========== */
+.mountains {
+  position: absolute;
+  bottom: 30%;
+  width: 100%;
+  height: 300px;
+}
+
+.mountain {
+  position: absolute;
+  bottom: 0;
+  border-left: 150px solid transparent;
+  border-right: 150px solid transparent;
+}
+
+.mountain1 {
+  border-bottom: 250px solid #ff6b35;
+  left: 10%;
+  z-index: 1;
+}
+
+.mountain2 {
+  border-bottom: 300px solid #f7931e;
+  left: 30%;
+  z-index: 2;
+}
+
+.mountain3 {
+  border-bottom: 200px solid #ff8c42;
+  left: 55%;
+  z-index: 1;
+}
+
+/* ========== COHETE ========== */
+.rocket-container {
+  position: absolute;
+  bottom: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  animation: rocket-fly 3s ease-in-out infinite;
+}
+
+@keyframes rocket-fly {
+  0%, 100% { transform: translateX(-50%) translateY(0) rotate(-5deg); }
+  50% { transform: translateX(-50%) translateY(-20px) rotate(5deg); }
+}
+
+.rocket {
+  position: relative;
+  width: 60px;
+  height: 100px;
+}
+
+.rocket-body {
+  position: absolute;
+  width: 60px;
+  height: 80px;
+  background: linear-gradient(to bottom, #ff6b6b 0%, #ee5a6f 100%);
+  border-radius: 50% 50% 0 0;
+  bottom: 20px;
+}
+
+.rocket-window {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #4ecdc4;
+  border-radius: 50%;
+  top: 25px;
+  left: 20px;
+  border: 3px solid white;
+}
+
+.rocket-wing-left,
+.rocket-wing-right {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-bottom: 40px solid #c44569;
+  bottom: 20px;
+}
+
+.rocket-wing-left {
+  border-right: 20px solid transparent;
+  left: -15px;
+  border-radius: 0 0 0 10px;
+}
+
+.rocket-wing-right {
+  border-left: 20px solid transparent;
+  right: -15px;
+  border-radius: 0 0 10px 0;
+}
+
+.rocket-fire {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 30px solid #ffa502;
+  bottom: -10px;
+  left: 15px;
+  animation: fire-flicker 0.2s infinite alternate;
+}
+
+@keyframes fire-flicker {
+  0% {
+    border-top-color: #ffa502;
+    transform: scaleY(1);
+  }
+  100% {
+    border-top-color: #ff6348;
+    transform: scaleY(1.2);
+  }
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 968px) {
+  .login-wrapper {
+    flex-direction: column;
+  }
+
+  .login-left {
+    flex: 0 0 100%;
+    padding: 30px 20px;
+  }
+
+  .login-right {
+    display: none;
+  }
+
+  .login-form-container {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  h2 {
+    font-size: 26px;
+  }
+
+  .logo {
+    width: 80px;
+    height: 80px;
+  }
+
+  .login-left {
+    padding: 20px 15px;
+  }
 }

@@ -41,6 +41,23 @@ switch ($uri) {
         (new LoginController())->cerrarSesion();
         break;
 
+    // Rutas de recuperación de contraseña
+    case '/olvide-password':
+        (new LoginController())->mostrarOlvidePassword();
+        break;
+
+    case '/enviar-recuperacion':
+        (new LoginController())->enviarRecuperacion();
+        break;
+
+    case '/restablecer-password':
+        (new LoginController())->mostrarRestablecerPassword();
+        break;
+
+    case '/procesar-restablecer-password':
+        (new LoginController())->procesarRestablecerPassword();
+        break;
+
     case '/dashboard':
         SessionManager::requireAuth();
         (new DashboardController())->index();

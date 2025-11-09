@@ -21,16 +21,24 @@ class AdminModel {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function insertarAdmin($nombre, $usuario, $contraseña, $rol) {
-        $sql = "INSERT INTO usuarios (nombre, usuario, contraseña, rol, estado) VALUES (?, ?, ?, ?, 1)";
+    public function insertarAdmin($nombre, $usuario, $email, $contraseña, $rol) {
+        $sql = "INSERT INTO usuarios (nombre, usuario, email, contraseña, rol, estado) VALUES (?, ?, ?, ?, ?, 1)";
         $stmt = $this->conn->prepare($sql);
-        $stmt->execute([$nombre, $usuario, $contraseña, $rol]);
+        $stmt->execute([$nombre, $usuario, $email, $contraseña, $rol]);
     }
 
-    public function actualizarAdmin($id_usuario, $nombre, $usuario, $rol) {
-        $sql = "UPDATE usuarios SET nombre=?, usuario=?, rol=? WHERE id_usuario=?";
-        $stmt = $this->conn->prepare($sql);
-        return $stmt->execute([$nombre, $usuario, $rol, $id_usuario]);
+    public function actualizarAdmin($id_usuario, $nombre, $usuario, $email, $rol, $contraseña = null) {
+        if ($contraseña) {
+            // Si se proporciona nueva contraseña, actualizarla también
+            $sql = "UPDATE usuarios SET nombre=?, usuario=?, email=?, rol=?, contraseña=? WHERE id_usuario=?";
+            $stmt = $this->conn->prepare($sql);
+            return $stmt->execute([$nombre, $usuario, $email, $rol, $contraseña, $id_usuario]);
+        } else {
+            // Si no se proporciona contraseña, solo actualizar los demás campos
+            $sql = "UPDATE usuarios SET nombre=?, usuario=?, email=?, rol=? WHERE id_usuario=?";
+            $stmt = $this->conn->prepare($sql);
+            return $stmt->execute([$nombre, $usuario, $email, $rol, $id_usuario]);
+        }
     }
 
     public function eliminarAdmin($id_usuario) {

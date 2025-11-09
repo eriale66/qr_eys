@@ -85,7 +85,7 @@ require_once __DIR__ . '/../../utils/CSRF.php';
                 <input type="text" name="telefono" required placeholder="Ej. 8991234567">
 
                 <div class="form-buttons">
-                    <button type="submit" class="btn primary">💾 Guardar</button>
+                    <button type="submit" class="btn primary"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
                     <a href="/qr_eys/public/clientes" class="btn danger">Cancelar</a>
                 </div>
             </form>

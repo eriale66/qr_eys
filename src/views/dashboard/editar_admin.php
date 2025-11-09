@@ -81,6 +81,12 @@ require_once __DIR__ . '/../../utils/CSRF.php';
                 <label>Usuario</label>
                 <input type="text" name="usuario" value="<?= htmlspecialchars($admin['usuario']) ?>" required>
 
+                <label>Correo Electrónico</label>
+                <input type="email" name="email" value="<?= htmlspecialchars($admin['email'] ?? '') ?>" placeholder="ejemplo@correo.com" required>
+
+                <label>Nueva Contraseña (dejar en blanco para no cambiar)</label>
+                <input type="password" name="contraseña" minlength="8" placeholder="Dejar vacío para mantener la actual">
+
                 <label>Rol</label>
                 <select name="rol">
                     <option value="admin" <?= $admin['rol'] === 'admin' ? 'selected' : '' ?>>Administrador</option>
@@ -88,7 +94,7 @@ require_once __DIR__ . '/../../utils/CSRF.php';
                 </select>
 
                 <div class="form-buttons">
-                    <button type="submit" class="btn primary">💾 Actualizar</button>
+                    <button type="submit" class="btn primary"><i class="fa-solid fa-floppy-disk"></i> Actualizar</button>
                     <a href="/qr_eys/public/administracion" class="btn danger">Cancelar</a>
                 </div>
             </form>

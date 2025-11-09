@@ -80,8 +80,11 @@ require_once __DIR__ . '/../../utils/CSRF.php';
                 <label>Usuario</label>
                 <input type="text" name="usuario" required>
 
+                <label>Correo Electrónico</label>
+                <input type="email" name="email" placeholder="ejemplo@correo.com" required>
+
                 <label>Contraseña</label>
-                <input type="password" name="contraseña" required>
+                <input type="password" name="contraseña" minlength="8" required>
 
                 <label>Rol</label>
                 <select name="rol" required>
@@ -90,7 +93,7 @@ require_once __DIR__ . '/../../utils/CSRF.php';
                 </select>
 
                 <div class="form-buttons">
-                    <button type="submit" class="btn primary">💾 Guardar</button>
+                    <button type="submit" class="btn primary"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
                     <a href="/qr_eys/public/administracion" class="btn danger">Cancelar</a>
                 </div>
             </form>

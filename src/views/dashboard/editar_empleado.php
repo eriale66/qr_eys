@@ -90,7 +90,7 @@ require_once __DIR__ . '/../../utils/CSRF.php';
                 <input type="text" name="telefono" value="<?= htmlspecialchars($empleado['telefono']) ?>" required>
 
                 <div class="form-buttons">
-                    <button type="submit" class="btn primary">💾 Actualizar</button>
+                    <button type="submit" class="btn primary"><i class="fa-solid fa-floppy-disk"></i> Actualizar</button>
                     <a href="/qr_eys/public/empleados" class="btn danger">Cancelar</a>
                 </div>
             </form>

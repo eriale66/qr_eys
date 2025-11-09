@@ -41,4 +41,24 @@ class UsuarioModel {
     }
     return false;
     }
+
+    /**
+     * Buscar usuario por email
+     */
+    public function obtenerPorEmail($email) {
+        $sql = "SELECT * FROM usuarios WHERE email = ? AND estado = 1";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$email]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Actualizar contraseña de usuario
+     */
+    public function actualizarPassword($email, $nuevaPassword) {
+        $hash = password_hash($nuevaPassword, PASSWORD_BCRYPT);
+        $sql = "UPDATE usuarios SET contraseña = ? WHERE email = ? AND estado = 1";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([$hash, $email]);
+    }
 }

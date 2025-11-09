@@ -25,18 +25,25 @@ class AdminController {
 
             $nombre = $_POST['nombre'] ?? '';
             $usuario = $_POST['usuario'] ?? '';
+            $email = $_POST['email'] ?? '';
             $contraseña = $_POST['contraseña'] ?? '';
             $rol = $_POST['rol'] ?? 'admin';
 
-            if (empty($nombre) || empty($usuario) || empty($contraseña)) {
+            if (empty($nombre) || empty($usuario) || empty($email) || empty($contraseña)) {
                 header("Location: /qr_eys/public/administracion?type=error&msg=" . urlencode('Todos los campos son obligatorios'));
+                exit;
+            }
+
+            // Validar formato de email
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                header("Location: /qr_eys/public/administracion?type=error&msg=" . urlencode('El correo electrónico no es válido'));
                 exit;
             }
 
             // Encriptar contraseña
             $hash = password_hash($contraseña, PASSWORD_BCRYPT);
 
-            $this->adminModel->insertarAdmin($nombre, $usuario, $hash, $rol);
+            $this->adminModel->insertarAdmin($nombre, $usuario, $email, $hash, $rol);
 
             header("Location: /qr_eys/public/administracion?type=success&msg=" . urlencode('Administrador agregado correctamente'));
             exit;
@@ -56,14 +63,28 @@ class AdminController {
             $id = $_POST['id_usuario'] ?? '';
             $nombre = $_POST['nombre'] ?? '';
             $usuario = $_POST['usuario'] ?? '';
+            $email = $_POST['email'] ?? '';
+            $contraseña = $_POST['contraseña'] ?? '';
             $rol = $_POST['rol'] ?? 'admin';
 
-            if (empty($id) || empty($nombre) || empty($usuario)) {
+            if (empty($id) || empty($nombre) || empty($usuario) || empty($email)) {
                 header("Location: /qr_eys/public/administracion?type=error&msg=" . urlencode('Todos los campos son obligatorios'));
                 exit;
             }
 
-            $this->adminModel->actualizarAdmin($id, $nombre, $usuario, $rol);
+            // Validar formato de email
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                header("Location: /qr_eys/public/administracion?type=error&msg=" . urlencode('El correo electrónico no es válido'));
+                exit;
+            }
+
+            // Si se proporcionó una nueva contraseña, encriptarla
+            $hash = null;
+            if (!empty($contraseña)) {
+                $hash = password_hash($contraseña, PASSWORD_BCRYPT);
+            }
+
+            $this->adminModel->actualizarAdmin($id, $nombre, $usuario, $email, $rol, $hash);
             header("Location: /qr_eys/public/administracion?type=success&msg=" . urlencode('Administrador actualizado correctamente'));
             exit;
         }
